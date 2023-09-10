@@ -41,6 +41,10 @@ BOOL TestMultipleArguments(ADDRESS_TYPE argumentsAddress) {
     return TRUE;
 }
 
+BOOL EjectDLL() {
+    return HackHandler.MarkDLLToBeEjected();
+}
+
 EXPOSE ExecuteFunction(LPVOID argumentsAddress) {
     while (!HackHandler.IsReady()) {
         Sleep(100);
@@ -51,8 +55,7 @@ EXPOSE ExecuteFunction(LPVOID argumentsAddress) {
         ADDRESS_TYPE argumentAddress = (ADDRESS_TYPE)argumentsAddress + (functionName.length() + 1);
 
         if (functionName == "EjectDLL") {
-            HackHandler.MarkDLLToBeEjected();
-            return TRUE;
+            return EjectDLL();
         }
 
         if (functionName == "TestIntArgument") {

@@ -20,8 +20,9 @@ void Service::MainLoop() {
 }
 
 
-void Service::MarkDLLToBeEjected() {
+BOOL Service::MarkDLLToBeEjected() {
     this->shouldEjectDLL = TRUE;
+    return TRUE;
 }
 
 

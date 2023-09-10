@@ -18,7 +18,7 @@ namespace HackHandlerNS {
         void Init();
         void Reset();
         void MainLoop();
-        void MarkDLLToBeEjected();
+        BOOL MarkDLLToBeEjected();
         BOOL ShouldDLLBeEjected();
         BOOL IsReady();
 
