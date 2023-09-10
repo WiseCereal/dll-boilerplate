@@ -2,13 +2,24 @@
 
 #include "headers/HackHandler.h"
 
+#include "headers/services/FeaturesHandler/FeaturesHandler.h"
+#include "headers/services/Hooker/Hooker.h"
+
 
 using namespace HackHandlerNS;
 
 
-Service::Service() {}
+Service::Service(
+    HookerNS::Service* hookerService,
+    FeaturesHandlerNS::Service* featuresHandler
+) {
+    this->hookerService = hookerService;
+    this->featuresHandler = featuresHandler;
+}
 
 void Service::Init() {
+    this->hookerService->InitHooks();
+
     this->isReady = TRUE;
 }
 

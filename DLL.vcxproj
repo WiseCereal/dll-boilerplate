@@ -159,8 +159,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="cpp\exceptions\AccessViolationException.cpp" />
+    <ClCompile Include="cpp\exceptions\NotFoundException.cpp" />
+    <ClCompile Include="cpp\features\TestFeature.cpp" />
     <ClCompile Include="cpp\HackHandler.cpp" />
+    <ClCompile Include="cpp\hooks\TestHook.cpp" />
     <ClCompile Include="cpp\services\ConsoleHandler\ConsoleHandler.cpp" />
+    <ClCompile Include="cpp\services\FeaturesHandler\Feature.cpp" />
+    <ClCompile Include="cpp\services\FeaturesHandler\FeaturesHandler.cpp" />
+    <ClCompile Include="cpp\services\Hooker\HookData.cpp" />
+    <ClCompile Include="cpp\services\Hooker\Hooker.cpp" />
+    <ClCompile Include="cpp\services\Hooker\HookerThreads.cpp" />
+    <ClCompile Include="cpp\utils\AddressUtils.cpp" />
+    <ClCompile Include="cpp\utils\CodingUtils.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -174,10 +185,20 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="headers\exceptions\AccessViolationException.h" />
+    <ClInclude Include="headers\exceptions\NotFoundException.h" />
+    <ClInclude Include="headers\features\TestFeature.h" />
     <ClInclude Include="headers\framework.h" />
     <ClInclude Include="headers\HackHandler.h" />
+    <ClInclude Include="headers\hooks\TestHook.h" />
     <ClInclude Include="headers\pch.h" />
     <ClInclude Include="headers\services\ConsoleHandler.h" />
+    <ClInclude Include="headers\services\FeaturesHandler\Feature.h" />
+    <ClInclude Include="headers\services\FeaturesHandler\FeaturesHandler.h" />
+    <ClInclude Include="headers\services\Hooker\HookData.h" />
+    <ClInclude Include="headers\services\Hooker\Hooker.h" />
+    <ClInclude Include="headers\utils\AddressUtils.h" />
+    <ClInclude Include="headers\utils\CodingUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

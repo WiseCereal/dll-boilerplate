@@ -2,12 +2,20 @@
 
 #include "headers/HackHandler.h"
 #include "headers/services/ConsoleHandler.h"
+#include "headers/services/FeaturesHandler/FeaturesHandler.h"
+#include "headers/services/Hooker/Hooker.h"
 
 #define EXPOSE __declspec(dllexport) BOOL __stdcall
 
 /******** Services initializations ********/
 ConsoleHandlerNS::Handler ConsoleHandler;
-HackHandlerNS::Service HackHandler;
+FeaturesHandlerNS::Service FeaturesHandler;
+HookerNS::Service HookerService(&FeaturesHandler);
+
+HackHandlerNS::Service HackHandler(
+    &HookerService,
+    &FeaturesHandler
+);
 /******************************************/
 
 
