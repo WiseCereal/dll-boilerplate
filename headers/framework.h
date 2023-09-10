@@ -1,9 +1,9 @@
 #pragma once
 
 #ifdef _WIN64
-	#define ADDRESS_TYPE long long
+	#define ADDRESS_TYPE ULONG64
 #else
-	#define ADDRESS_TYPE UINT
+	#define ADDRESS_TYPE DWORD32
 #endif
 
 #include <windows.h>
