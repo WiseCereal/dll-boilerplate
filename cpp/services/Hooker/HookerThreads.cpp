@@ -12,19 +12,23 @@ using namespace HookerNS;
 void Threads::InitAddressesThread(HookData* hook) {
     hook->SetIsFindOriginalAddressThreadRunning(TRUE);
 
-    // if must scan, call getByScanningByes
-    // if can use offset, read memory at base addr + offset
-
-    auto addr = AddressUtils::GetByScanningBytes(
-        (ADDRESS_TYPE)hook->GetScanStartingAddress() + hook->GetBytesToReplaceAddressOffset(),
-        (ADDRESS_TYPE)hook->GetScanEndingAddress(),
-        hook->GetAmountOfBytesToSkipBetweenScans(),
-        hook->GetBytesToReplace(),
-        [hook]() {
-            return hook->ShouldEndThread();
-        }
-    );
-    hook->SetOriginalAddress(addr);
+    if (hook->DirectReadWithOffset()) {
+        hook->SetOriginalAddress(
+            (LPVOID)((ADDRESS_TYPE)hook->GetScanStartingAddress() + hook->GetBytesToReplaceAddressOffset())
+        );
+    }
+    else {
+        auto addr = AddressUtils::GetByScanningBytes(
+            (ADDRESS_TYPE)hook->GetScanStartingAddress() + hook->GetBytesToReplaceAddressOffset(),
+            (ADDRESS_TYPE)hook->GetScanEndingAddress(),
+            hook->GetAmountOfBytesToSkipBetweenScans(),
+            hook->GetBytesToReplace(),
+            [hook]() {
+                return hook->ShouldEndThread();
+            }
+        );
+        hook->SetOriginalAddress(addr);
+    }
 
     hook->SetIsFindOriginalAddressThreadRunning(FALSE);
 }

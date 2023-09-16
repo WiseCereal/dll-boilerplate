@@ -10,7 +10,7 @@ using namespace HookerNS;
 void HookData::Reset() {
     this->originalAddress = (LPVOID)(ADDRESS_TYPE)0x0000000000000000;
     this->scanStartingAddress = (LPVOID)(ADDRESS_TYPE)0x0000000000000000;
-    this->scanEndingAddress = (LPVOID)(ADDRESS_TYPE)0xFFFFFFFFFFFFFFFF;
+    this->scanEndingAddress = (LPVOID)(ADDRESS_TYPE)0x00007FFFFFFFFFFF;
 }
 
 std::vector<BYTE> HookData::GetBytesToReplace() {

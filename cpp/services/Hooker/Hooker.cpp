@@ -147,6 +147,95 @@ Service* Service::_enableHook(HookerNS::HookData* hookData) {
         throw std::runtime_error("Can't enable hook " + hookData->GetName() + " - originalAddress not set");
     }
 
+    /*
+        TODO: 
+        Same as original addon with jmp skeleton. Example with x64,
+        but we should also support x32:
+
+        0:  50                               push   rax                    // Save the register that will be used to store the ABSOLUTE address of our trampoline
+        1:  48 b8 ff ff ff ff ff 7f 00 00    movabs rax,0x7fffffffffff     // Move the ABSOLUTE address of our trampoline into the pushed register
+        b:  ff e0                            jmp    rax                    // Jump to our trampoline function
+        d:  58                               pop    rax                    // Restore register
+
+        
+        Trampoline:
+        Now I must manually write the bytes instead of inline asm,
+        because inline asm no longer works.
+
+        So:
+        Allocate memory, and write the bytes of this trampoline.
+        Bytes can be easily acquired here https://defuse.ca/online-x86-assembler.htm#disassembly
+
+            PUSH ALL REGISTERS // in x64 looks like I have to manually push each one with push rax, push rsi, push r9, etc etc etc
+            PUSH FLAGS
+
+            mov rax,0x7fffffffffff // Move the ABSOLUTE address of our DLL c++ function
+            CALL rax // Call our dll c++ function. THIS MUST BE A NAKED FUNCTION.
+                
+            POP FLAGS
+            POP ALL REGISTERS
+
+            MOV rax,0x7fffffffffff // Return address right after we set up the jump to this trampoline (the POP instruction)
+            JMP rax
+
+
+
+
+
+            stack: random1
+                   random2
+            
+            Init. rax = 123. Must still have 123 at the end.
+
+            push rax
+
+            stack: 123
+                   random1
+                   random2
+
+            push all registers and flag
+
+            stack: random-flags-value
+                   random-registers-data
+                   123
+                   random1
+                   random2
+
+            CALL rax
+            stack: return-addr-inside-trampoline
+                   random-flags-value
+                   random-registers-data
+                   123
+                   random1
+                   random2
+
+            After our own dll cpp function has been executed, the RETURN will automatically remove the return addr from the stack
+            stack: random-flags-value
+                   random-registers-data
+                   123
+                   random1
+                   random2
+
+            POP FLAGS
+            POP ALL REGISTERS
+
+            jmp original code flow, where the POP rax instruction is
+
+            stack: 123
+                   random1
+                   random2
+
+            pop rax
+
+                and yes, rax still has the original 123 value.
+                So we can use the same register for everything!
+                
+                Not really. Almost.
+                We can use ANY register that is not used in the code that will be replaced by the JMP to the trampoline.
+
+                So, each hook will have it's own safe register to use.
+    */
+
     auto len = hookData->GetBytesToReplace().size();
     auto originalAddress = hookData->GetOriginalAddress();
 

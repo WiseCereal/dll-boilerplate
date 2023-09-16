@@ -1,5 +1,6 @@
 #include "headers/pch.h"
 
+#include "headers/utils/RegistersUtils.h"
 #include "headers/services/FeaturesHandler/FeaturesHandler.h"
 #include "headers/services/Hooker/HookData.h"
 #include "headers/hooks/TestHook.h"
@@ -30,7 +31,7 @@ void TestHookTrampoline() {
 
 }
 
-void TestHookedCode(HookerNS::x64Registers registers, ADDRESS_TYPE flags) {
+void TestHookedCode(RegistersUtils::x64Registers registers, ADDRESS_TYPE flags) {
 
 }
 
@@ -49,8 +50,16 @@ void Data::InitFeatures() {
     Features::TEST_FEATURE = (FeaturesNS::TestFeatureNS::Feature*)this->featuresHandler->GetFeature(FeaturesNS::TestFeatureNS::NAME);
 }
 
+BOOL Data::DirectReadWithOffset() {
+    return TRUE;
+}
+
 ADDRESS_TYPE Data::GetTrampolineRef() {
     HOOK_ADDRESS = (ADDRESS_TYPE)TestHookedCode;
     RETURN_ADDRESS = (ADDRESS_TYPE)this->GetOriginalAddress() + 5;
     return (ADDRESS_TYPE)TestHookTrampoline;
+}
+
+RegistersUtils::Register Data::GetRegisterForSafeJump() {
+    return RegistersUtils::Register::RAX;
 }

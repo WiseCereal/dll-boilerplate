@@ -172,6 +172,7 @@
     <ClCompile Include="cpp\services\Hooker\HookerThreads.cpp" />
     <ClCompile Include="cpp\utils\AddressUtils.cpp" />
     <ClCompile Include="cpp\utils\CodingUtils.cpp" />
+    <ClCompile Include="cpp\utils\RegistersUtils.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -199,6 +200,7 @@
     <ClInclude Include="headers\services\Hooker\Hooker.h" />
     <ClInclude Include="headers\utils\AddressUtils.h" />
     <ClInclude Include="headers\utils\CodingUtils.h" />
+    <ClInclude Include="headers\utils\RegistersUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

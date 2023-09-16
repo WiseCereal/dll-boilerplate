@@ -1,7 +1,7 @@
 #pragma once
 
 #include "headers/pch.h"
-#include "headers/services/Hooker/HookData.h"
+#include "headers/utils/RegistersUtils.h"
 #include "headers/features/TestFeature.h"
 
 
@@ -22,6 +22,8 @@ namespace HooksNS {
             Data();
             ADDRESS_TYPE GetTrampolineRef();
             void InitFeatures();
+            BOOL DirectReadWithOffset();
+            RegistersUtils::Register GetRegisterForSafeJump();
 
             std::string GetName() {
                 return NAME;

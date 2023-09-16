@@ -2,25 +2,10 @@
 
 #include "headers/pch.h"
 #include "headers/utils/CodingUtils.h"
+#include "headers/utils/RegistersUtils.h"
 #include "headers/services/FeaturesHandler/FeaturesHandler.h"
 
 namespace HookerNS {
-
-    struct x86Registers {
-        // Do not change the order. This is the order they get pushed onto the stack with pushad.
-        DWORD32 EDI;
-        DWORD32 ESI;
-        DWORD32 EBP;
-        DWORD32 ESP;
-        DWORD32 EBX;
-        DWORD32 EDX;
-        DWORD32 ECX;
-        DWORD32 EAX;
-    };
-
-    struct x64Registers {
-        // Do not change the order. This is the order they get pushed onto the stack with pushad.
-    };
 
     class HookData {
     protected:
@@ -41,6 +26,8 @@ namespace HookerNS {
         virtual std::string GetName() = 0;
         virtual ADDRESS_TYPE GetTrampolineRef() = 0;
         virtual void InitFeatures() = 0;
+        virtual BOOL DirectReadWithOffset() = 0;
+        virtual RegistersUtils::Register GetRegisterForSafeJump() = 0;
 
         void Reset();
         std::vector<BYTE> GetBytesToReplace();
