@@ -53,6 +53,10 @@ BOOL EjectDLL() {
     return HackHandler.MarkDLLToBeEjected();
 }
 
+BOOL IsDLLReady() {
+    return HackHandler.IsReady();
+}
+
 EXPOSE ExecuteFunction(LPVOID argumentsAddress) {
     while (!HackHandler.IsReady()) {
         Sleep(100);
@@ -64,6 +68,10 @@ EXPOSE ExecuteFunction(LPVOID argumentsAddress) {
 
         if (functionName == "EjectDLL") {
             return EjectDLL();
+        }
+
+        if (functionName == "IsDLLReady") {
+            return IsDLLReady();
         }
 
         if (functionName == "TestIntArgument") {
