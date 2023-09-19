@@ -58,20 +58,21 @@ BOOL IsDLLReady() {
 }
 
 EXPOSE ExecuteFunction(LPVOID argumentsAddress) {
-    while (!HackHandler.IsReady()) {
-        Sleep(100);
-    }
-
     try {
         std::string functionName = (const char*)argumentsAddress;
         ADDRESS_TYPE argumentAddress = (ADDRESS_TYPE)argumentsAddress + (functionName.length() + 1);
 
-        if (functionName == "EjectDLL") {
-            return EjectDLL();
-        }
-
         if (functionName == "IsDLLReady") {
             return IsDLLReady();
+        }
+
+        if (!HackHandler.IsReady()) {
+            std::cout << " DLL is not ready - Disallowed to call DLL functions until it's ready " << std::endl;
+            return FALSE;
+        }
+
+        if (functionName == "EjectDLL") {
+            return EjectDLL();
         }
 
         if (functionName == "TestIntArgument") {

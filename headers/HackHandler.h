@@ -29,6 +29,7 @@ namespace HackHandlerNS {
         BOOL MarkDLLToBeEjected();
         BOOL ShouldDLLBeEjected();
         BOOL IsReady();
+        void MarkAsReady();
 
     private:
         BOOL isReady = FALSE;

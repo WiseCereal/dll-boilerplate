@@ -17,11 +17,15 @@ Service::Service(
     this->featuresHandler = featuresHandler;
 }
 
+void InitThread(Service* handler) {
+    Sleep(10000);
+    handler->MarkAsReady();
+}
 void Service::Init() {
     this->hookerService->InitHooks();
-
-    this->isReady = TRUE;
+    CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)InitThread, this, 0, NULL);
 }
+
 
 void Service::Reset() {
 }
@@ -43,6 +47,10 @@ BOOL Service::ShouldDLLBeEjected() {
 
 BOOL Service::IsReady() {
     return this->isReady;
+}
+
+void Service::MarkAsReady() {
+    this->isReady = TRUE;
 }
 
 void Service::checkEjectDLLKeysCombination() {
