@@ -101,6 +101,11 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate";
+COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate\node_modules\electron\dist\resources";
+COPY /B  "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_node_addon_boilerplate\app-1.0.0\resources"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -121,6 +126,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate";
+COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate\node_modules\electron\dist\resources";
+COPY /B  "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_node_addon_boilerplate\app-1.0.0\resources"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -137,6 +147,11 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate";
+COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate\node_modules\electron\dist\resources";
+COPY /B  "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_node_addon_boilerplate\app-1.0.0\resources"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -157,6 +172,11 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PostBuildEvent>
+      <Command>COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate";
+COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate\node_modules\electron\dist\resources";
+COPY /B  "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_node_addon_boilerplate\app-1.0.0\resources"</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="cpp\exceptions\AccessViolationException.cpp" />
