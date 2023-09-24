@@ -163,49 +163,47 @@ Service* Service::_enableHook(HookerNS::HookData* hookData) {
     memset(originalAddress, 0x90, len);
 
     /*****/
-    std::vector<BYTE> trampolineBytes = hookData->GetTrampolineBytes(this->jmpSkeleton.size());
-    LPVOID trampolineBytesAddress = trampolineBytes.data();
+    std::vector<BYTE>* trampolineBytes = hookData->GetTrampolineBytes(this->jmpSkeleton.size());
+    LPVOID trampolineBytesAddress = trampolineBytes->data();
 
     std::vector<BYTE> jmpToTrampolineBytes = this->jmpSkeleton;
 
     RegistersUtils::Register registerToUse = hookData->GetRegisterForSafeJump();
-    BYTE movRegisterByte = RegistersUtils::MOVInstructionByte(registerToUse);
-    BYTE jmpRegisterByte = RegistersUtils::JMPInstructionByte(registerToUse);
-    BYTE pushRegisterByte = RegistersUtils::PUSHInstructionByte(registerToUse);
-    BYTE popRegisterByte = RegistersUtils::POPInstructionByte(registerToUse);
+    std::vector<BYTE> movRegisterBytes = RegistersUtils::MOVInstructionBytes(registerToUse);
+    std::vector<BYTE> jmpRegisterBytes = RegistersUtils::JMPInstructionBytes(registerToUse);
+    std::vector<BYTE> pushRegisterBytes = RegistersUtils::PUSHInstructionBytes(registerToUse);
+    std::vector<BYTE> popRegisterBytes = RegistersUtils::POPInstructionBytes(registerToUse);
 
 
     std::string strAddress;
-    UINT startIndexOfMovInstruction = 1;
+    UINT startIndexOfMovInstruction = 2;
     if (this->architecture == 0x86) {
         strAddress = CodingUtils::ScalarToHexString<DWORD>(
             _byteswap_ulong(CodingUtils::CastLPVOID<DWORD>(trampolineBytesAddress))
         );
         strAddress = CodingUtils::LeftZeroPad(strAddress, 8);
-        startIndexOfMovInstruction = 1;
     }
     if (this->architecture == 0x64) {
         strAddress = CodingUtils::ScalarToHexString<long long>(
             _byteswap_uint64(CodingUtils::CastLPVOID<long long>(trampolineBytesAddress))
         );
         strAddress = CodingUtils::LeftZeroPad(strAddress, 16);
-        startIndexOfMovInstruction = 2;
     }
 
-    // Set push $register byte at the beginning of the jmp
-    CodingUtils::ByteArrayReplace(0, CodingUtils::ScalarToHexString<UINT>(pushRegisterByte), jmpToTrampolineBytes.data());
+    // Set push $register bytes at the beginning of the jmp
+    CodingUtils::ByteArrayReplace(0, CodingUtils::ByteArrayToHexString(pushRegisterBytes.data(), pushRegisterBytes.size()), jmpToTrampolineBytes.data());
 
-    // Set mov $register byte right after the push $register
-    CodingUtils::ByteArrayReplace(startIndexOfMovInstruction, CodingUtils::ScalarToHexString<UINT>(movRegisterByte), jmpToTrampolineBytes.data());
+    // Set mov $register bytes right after the push $register
+    CodingUtils::ByteArrayReplace(startIndexOfMovInstruction, CodingUtils::ByteArrayToHexString(movRegisterBytes.data(), movRegisterBytes.size()), jmpToTrampolineBytes.data());
 
     // Set the trampoline bytes memory address right after mov $register
-    CodingUtils::ByteArrayReplace(startIndexOfMovInstruction + 1, strAddress, jmpToTrampolineBytes.data());
+    CodingUtils::ByteArrayReplace(startIndexOfMovInstruction + movRegisterBytes.size(), strAddress, jmpToTrampolineBytes.data());
 
-    // Set the jmp $register byte
-    CodingUtils::ByteArrayReplace(jmpToTrampolineBytes.size() - 2, CodingUtils::ScalarToHexString<UINT>(jmpRegisterByte), jmpToTrampolineBytes.data());
+    // Set the jmp $register bytes
+    CodingUtils::ByteArrayReplace(jmpToTrampolineBytes.size() - 5, CodingUtils::ByteArrayToHexString(jmpRegisterBytes.data(), jmpRegisterBytes.size()), jmpToTrampolineBytes.data());
 
-    // Set pop $register byte at the end of the jmp
-    CodingUtils::ByteArrayReplace(jmpToTrampolineBytes.size() - 1, CodingUtils::ScalarToHexString<UINT>(popRegisterByte), jmpToTrampolineBytes.data());
+    // Set pop $register bytes at the end of the jmp
+    CodingUtils::ByteArrayReplace(jmpToTrampolineBytes.size() - 2, CodingUtils::ByteArrayToHexString(popRegisterBytes.data(), popRegisterBytes.size()), jmpToTrampolineBytes.data());
 
 
     // Finally overwrite the original bytes that were NOPPED at the beginning with the jmp bytes.
@@ -217,7 +215,7 @@ Service* Service::_enableHook(HookerNS::HookData* hookData) {
 
     // The trampoline bytes memory protection must be changed so this memory is marked as executable.
     DWORD _;
-    VirtualProtect(trampolineBytesAddress, trampolineBytes.size(), PAGE_EXECUTE_READWRITE, &_);
+    VirtualProtect(trampolineBytesAddress, trampolineBytes->size(), PAGE_EXECUTE_READWRITE, &_);
 
     // Restore original memory protection of the bytes that are changed to the jmp skeleton.
     VirtualProtect(originalAddress, len, originalProtection, &_);
@@ -252,18 +250,18 @@ Service* Service::initJmpSkeleton() {
     switch (this->architecture) {
     case 0x86:
         this->jmpSkeleton = {
-            0x00, // push $register
-            0x00, 0x00, 0x00, 0x00, 0x00, // mov $register, $address
-            0xFF, 0x00, // jmp $register,
-            0x00 // pop $register
+            0x00, 0x00, // push $register
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // mov $register, $address
+            0x00, 0x00, 0x00, // jmp $register,
+            0x00, 0x00 // pop $register
         };
         break;
     case 0x64:
         this->jmpSkeleton = {
-            0x00, // push $register
-            0x48, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // mov $register, $address
-            0xFF, 0x00, // jmp $register
-            0x00 // pop $register
+            0x00, 0x00, // push $register
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // mov $register, $address
+            0x00, 0x00, 0x00, // jmp $register
+            0x00, 0x00 // pop $register
         };
         break;
 

@@ -40,12 +40,14 @@ namespace RegistersUtils {
         RAX, RCX, RDX, RBX, RSP, RBP, RSI, RDI, R8, R9, R10, R11, R12, R13, R14, R15
     };
 
-    BYTE MOVInstructionByte(Register r);
+    std::vector<BYTE> MOVInstructionBytes(Register r);
 
-    BYTE JMPInstructionByte(Register r);
+    std::vector<BYTE> JMPInstructionBytes(Register r);
 
-    BYTE PUSHInstructionByte(Register r);
+    std::vector<BYTE> PUSHInstructionBytes(Register r);
 
-    BYTE POPInstructionByte(Register r);
+    std::vector<BYTE> POPInstructionBytes(Register r);
+
+    std::vector<BYTE> CALLInstructionBytes(Register r);
 
 }

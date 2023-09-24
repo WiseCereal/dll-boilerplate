@@ -99,7 +99,7 @@ EXPOSE ExecuteFunction(LPVOID argumentsAddress) {
     }
 }
 
-DWORD __stdcall HackThread(HMODULE h) {
+DWORD __stdcall HackThread(HMODULE dllHandle) {
     try {
         ConsoleHandler.OpenConsole();
 
@@ -120,7 +120,7 @@ DWORD __stdcall HackThread(HMODULE h) {
     }
 
     ConsoleHandler.CloseConsole();
-    FreeLibraryAndExitThread(h, 0);
+    FreeLibraryAndExitThread(dllHandle, 0);
 
     return 0;
 }

@@ -59,5 +59,6 @@ void Service::checkEjectDLLKeysCombination() {
         if (!(GetAsyncKeyState(key) & 0x8000)) // coding utils, IsKeyPressed :)
             return;
 
+    this->Reset();
     this->MarkDLLToBeEjected();
 }
