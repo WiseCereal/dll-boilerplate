@@ -152,19 +152,16 @@ Service* Service::_enableHook(HookerNS::HookData* hookData) {
         throw std::runtime_error("Can't enable hook " + hookData->GetName() + " - originalAddress not set");
     }
 
-    auto len = hookData->GetBytesToReplace().size();
-    auto originalAddress = hookData->GetOriginalAddress();
+    size_t len = hookData->GetBytesToReplace().size();
+    LPVOID originalAddress = hookData->GetOriginalAddress();
 
-    // Change the protection of the opcode address so we can overwrite it.
     DWORD originalProtection;
     VirtualProtect(originalAddress, len, PAGE_EXECUTE_READWRITE, &originalProtection);
 
-    // The bytesToReplace are replaced by NOPs
     memset(originalAddress, 0x90, len);
 
-    /*****/
     std::vector<BYTE>* trampolineBytes = hookData->GetTrampolineBytes(this->jmpSkeleton.size());
-    LPVOID trampolineBytesAddress = trampolineBytes->data();
+    ADDRESS_TYPE trampolineBytesAddress = (ADDRESS_TYPE)trampolineBytes->data();
 
     std::vector<BYTE> jmpToTrampolineBytes = this->jmpSkeleton;
 
@@ -174,48 +171,34 @@ Service* Service::_enableHook(HookerNS::HookData* hookData) {
     std::vector<BYTE> pushRegisterBytes = RegistersUtils::PUSHInstructionBytes(registerToUse);
     std::vector<BYTE> popRegisterBytes = RegistersUtils::POPInstructionBytes(registerToUse);
 
+    std::vector<BYTE> trampolineBytesAddressVector = CodingUtils::ToReversedBytesVector(trampolineBytesAddress);
 
-    std::string strAddress;
     UINT startIndexOfMovInstruction = 2;
-    if (this->architecture == 0x86) {
-        strAddress = CodingUtils::ScalarToHexString<DWORD>(
-            _byteswap_ulong(CodingUtils::CastLPVOID<DWORD>(trampolineBytesAddress))
-        );
-        strAddress = CodingUtils::LeftZeroPad(strAddress, 8);
-    }
-    if (this->architecture == 0x64) {
-        strAddress = CodingUtils::ScalarToHexString<long long>(
-            _byteswap_uint64(CodingUtils::CastLPVOID<long long>(trampolineBytesAddress))
-        );
-        strAddress = CodingUtils::LeftZeroPad(strAddress, 16);
-    }
 
     // Set push $register bytes at the beginning of the jmp
-    CodingUtils::ByteArrayReplace(0, CodingUtils::ByteArrayToHexString(pushRegisterBytes.data(), pushRegisterBytes.size()), jmpToTrampolineBytes.data());
+    CodingUtils::ByteArrayReplace(0, &pushRegisterBytes, &jmpToTrampolineBytes);
 
     // Set mov $register bytes right after the push $register
-    CodingUtils::ByteArrayReplace(startIndexOfMovInstruction, CodingUtils::ByteArrayToHexString(movRegisterBytes.data(), movRegisterBytes.size()), jmpToTrampolineBytes.data());
+    CodingUtils::ByteArrayReplace(startIndexOfMovInstruction, &movRegisterBytes, &jmpToTrampolineBytes);
 
     // Set the trampoline bytes memory address right after mov $register
-    CodingUtils::ByteArrayReplace(startIndexOfMovInstruction + movRegisterBytes.size(), strAddress, jmpToTrampolineBytes.data());
+    CodingUtils::ByteArrayReplace(startIndexOfMovInstruction + movRegisterBytes.size(), &trampolineBytesAddressVector, &jmpToTrampolineBytes);
 
     // Set the jmp $register bytes
-    CodingUtils::ByteArrayReplace(jmpToTrampolineBytes.size() - 5, CodingUtils::ByteArrayToHexString(jmpRegisterBytes.data(), jmpRegisterBytes.size()), jmpToTrampolineBytes.data());
+    CodingUtils::ByteArrayReplace(jmpToTrampolineBytes.size() - 5, &jmpRegisterBytes, &jmpToTrampolineBytes);
 
     // Set pop $register bytes at the end of the jmp
-    CodingUtils::ByteArrayReplace(jmpToTrampolineBytes.size() - 2, CodingUtils::ByteArrayToHexString(popRegisterBytes.data(), popRegisterBytes.size()), jmpToTrampolineBytes.data());
-
+    CodingUtils::ByteArrayReplace(jmpToTrampolineBytes.size() - 2, &popRegisterBytes, &jmpToTrampolineBytes);
 
     // Finally overwrite the original bytes that were NOPPED at the beginning with the jmp bytes.
     for (size_t i = 0; i < jmpToTrampolineBytes.size(); i++) {
         ADDRESS_TYPE addr = (ADDRESS_TYPE)originalAddress + i;
         memset((LPVOID)addr, jmpToTrampolineBytes.at(i), 1);
     }
-    /*****/
 
     // The trampoline bytes memory protection must be changed so this memory is marked as executable.
     DWORD _;
-    VirtualProtect(trampolineBytesAddress, trampolineBytes->size(), PAGE_EXECUTE_READWRITE, &_);
+    VirtualProtect((LPVOID)trampolineBytesAddress, trampolineBytes->size(), PAGE_EXECUTE_READWRITE, &_);
 
     // Restore original memory protection of the bytes that are changed to the jmp skeleton.
     VirtualProtect(originalAddress, len, originalProtection, &_);

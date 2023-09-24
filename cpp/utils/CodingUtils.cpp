@@ -18,41 +18,24 @@ bool CodingUtils::WStringContainsWString(std::wstring haystack, std::wstring nee
     return haystack.find(needle) != std::wstring::npos;
 }
 
-std::string CodingUtils::ByteArrayToHexString(BYTE* data, size_t len) {
-    std::stringstream ss;
-
-    ss << std::hex;
-    for (size_t i = 0; i < len; ++i) {
-        ss << std::setw(2) << std::setfill('0') << (int)data[i];
-    }
-
-    return ss.str();
-}
-
-void CodingUtils::ByteArrayReplace(size_t index, std::string replacement, BYTE* byteArray) {
-    std::string strByte = "";
-    int i = 0;
-    for (char& c : replacement) {
-        strByte.append(std::string(1, c));
-        i++;
-        if ((!(i % 2)) && i > 0) {
-            byteArray[index] = (BYTE)stoul(strByte, nullptr, 16);
-            index++;
-            strByte = "";
-        }
+void CodingUtils::ByteArrayReplace(size_t index, std::vector<BYTE>* replacement, std::vector<BYTE>* byteArray) {
+    UINT j = 0;
+    for (UINT i = index; i < index + replacement->size(); i++) {
+        byteArray->data()[i] = replacement->data()[j];
+        j++;
     }
 }
 
-std::string CodingUtils::LeftZeroPad(std::string str, UINT desiredLength) {
-    if (str.length() >= desiredLength) {
-        return str;
+std::vector<BYTE> CodingUtils::ToReversedBytesVector(ADDRESS_TYPE v) {
+    std::vector<BYTE> bytesVector;
+
+    bytesVector.reserve(sizeof(v));
+    for (size_t i = 0; i < sizeof(v); i++) {
+        bytesVector.push_back(v & 0xFF);
+        v >>= 8;
     }
 
-    while (str.length() < desiredLength) {
-        str.insert(0, "0");
-    }
-
-    return str;
+    return bytesVector;
 }
 
 UINT CodingUtils::HexStringToInt(std::string v) {
@@ -94,5 +77,17 @@ UINT CodingUtils::GetTargetArchitecture() {
         return 0x64;
     }
 
-    return 0x32;
+    return 0x86;
+}
+
+ADDRESS_TYPE CodingUtils::ReverseBytes(UINT architecture, ADDRESS_TYPE v) {
+    switch (architecture) {
+    case 0x86:
+        return _byteswap_ulong(v);
+    case 0x64:
+        return _byteswap_uint64(v);
+    default:
+        throw std::exception("Invalid architecture.");
+        break;
+    }
 }

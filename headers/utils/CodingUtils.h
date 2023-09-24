@@ -12,11 +12,9 @@ namespace CodingUtils {
 
     bool WStringContainsWString(std::wstring haystack, std::wstring needle);
 
-    std::string ByteArrayToHexString(BYTE* data, size_t len);
+    void ByteArrayReplace(size_t index, std::vector<BYTE>* replacement, std::vector<BYTE>* byteArray);
 
-    void ByteArrayReplace(size_t index, std::string replacement, BYTE* byteArray);
-
-    std::string LeftZeroPad(std::string str, UINT desiredLength);
+    std::vector<BYTE> ToReversedBytesVector(ADDRESS_TYPE v);
 
     UINT HexStringToInt(std::string v);
 
@@ -41,4 +39,6 @@ namespace CodingUtils {
     }
 
     UINT GetTargetArchitecture();
+
+    ADDRESS_TYPE ReverseBytes(UINT architecture, ADDRESS_TYPE v);
 }

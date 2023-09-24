@@ -29,6 +29,7 @@ Data::Data() {
     this->SetBytesToReplaceAddressOffset("0x38358D");
 
     // prepare trampoline bytes using x32 or x64 jmp skeleton and then set them
+    // trampoline bytes =  bytesToReplaceArray + jmp skeleton array
     this->SetTrampolineBytes({
         0x90,0x90,0x90,0x90,0x90,0x90,0x90,0x90,0x90,0x90,0x90,0x90,
     });
@@ -50,5 +51,5 @@ std::vector<BYTE>* Data::GetTrampolineBytes(UINT jmpSkeletonSize) {
 }
 
 RegistersUtils::Register Data::GetRegisterForSafeJump() {
-    return RegistersUtils::Register::R13;
+    return RegistersUtils::Register::RDX;
 }
