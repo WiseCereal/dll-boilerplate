@@ -12,12 +12,15 @@ using namespace HookerNS;
 void Threads::InitAddressesThread(HookData* hook) {
     hook->SetIsFindOriginalAddressThreadRunning(TRUE);
 
+    LPVOID baseModuleAddress = GetModuleHandle(hook->GetModuleName().data());
+
     if (hook->DirectReadWithOffset()) {
         hook->SetOriginalAddress(
-            (LPVOID)((ADDRESS_TYPE)hook->GetScanStartingAddress() + hook->GetBytesToReplaceAddressOffset())
+            (LPVOID)((ADDRESS_TYPE)baseModuleAddress + hook->GetBytesToReplaceAddressOffset())
         );
     }
     else {
+        hook->SetScanStartingAddress(baseModuleAddress);
         auto addr = AddressUtils::GetByScanningBytes(
             (ADDRESS_TYPE)hook->GetScanStartingAddress() + hook->GetBytesToReplaceAddressOffset(),
             (ADDRESS_TYPE)hook->GetScanEndingAddress(),

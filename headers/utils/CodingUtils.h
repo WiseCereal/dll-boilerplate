@@ -40,4 +40,5 @@ namespace CodingUtils {
         return *((T*)(&v));
     }
 
+    UINT GetTargetArchitecture();
 }

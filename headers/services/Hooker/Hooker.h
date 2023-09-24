@@ -7,18 +7,20 @@
 #include "headers/hooks/TestHook.h"
 
 namespace HookerNS {
-
     class Service {
     private:
         FeaturesHandlerNS::Service* featuresHandler;
+        UINT architecture;
 
         HooksNS::TestHook::Data testHook;
 
         std::vector<HookData*> hooksVector;
         std::vector<HANDLE> initHookThreads;
+        std::vector<BYTE> jmpSkeleton;
 
     public:
         Service(
+            UINT architecture,
             FeaturesHandlerNS::Service* featuresHandler
         );
 
@@ -36,6 +38,7 @@ namespace HookerNS {
         FeaturesHandlerNS::Service* GetFeaturesHandler();
 
     private:
+        Service* initJmpSkeleton();
         Service* validateHooks();
         HookData* findHook(std::string hookName);
         Service* _enableHook(HookData* hookData);

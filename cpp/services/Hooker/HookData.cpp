@@ -22,6 +22,15 @@ HookData* HookData::SetBytesToReplace(std::vector<BYTE> bytes) {
     return this;
 }
 
+std::vector<BYTE> HookData::GetTrampolineBytes() {
+    return this->trampolineBytes;
+}
+
+HookData* HookData::SetTrampolineBytes(std::vector<BYTE> bytes) {
+    this->trampolineBytes = bytes;
+    return this;
+}
+
 
 LPVOID HookData::GetScanStartingAddress() {
     return this->scanStartingAddress;
@@ -73,6 +82,14 @@ LPVOID HookData::GetOriginalAddress() {
 }
 HookData* HookData::SetOriginalAddress(LPVOID addr) {
     this->originalAddress = addr;
+    return this;
+}
+
+std::wstring HookData::GetModuleName() {
+    return this->moduleName;
+}
+HookData* HookData::SetModuleName(std::wstring moduleName) {
+    this->moduleName = moduleName;
     return this;
 }
 

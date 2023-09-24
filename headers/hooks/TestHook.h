@@ -20,7 +20,7 @@ namespace HooksNS {
         class Data : public HookerNS::HookData {
         public:
             Data();
-            ADDRESS_TYPE GetTrampolineRef();
+            std::vector<BYTE> GetTrampolineBytes(UINT jmpSkeletonSize);
             void InitFeatures();
             BOOL DirectReadWithOffset();
             RegistersUtils::Register GetRegisterForSafeJump();

@@ -18,7 +18,7 @@ Service::Service(
 }
 
 void InitThread(Service* handler) {
-    Sleep(10000);
+    Sleep(1000);
     handler->MarkAsReady();
 }
 void Service::Init() {

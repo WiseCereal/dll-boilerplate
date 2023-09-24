@@ -10,7 +10,10 @@
 /******** Services initializations ********/
 ConsoleHandlerNS::Handler ConsoleHandler;
 FeaturesHandlerNS::Service FeaturesHandler;
-HookerNS::Service HookerService(&FeaturesHandler);
+HookerNS::Service HookerService(
+    CodingUtils::GetTargetArchitecture(),
+    &FeaturesHandler
+);
 
 HackHandlerNS::Service HackHandler(
     &HookerService,

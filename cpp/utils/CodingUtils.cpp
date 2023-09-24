@@ -88,3 +88,11 @@ std::wstring CodingUtils::GetThisExecutableFolderPath() {
 
     return std::wstring(buffer).substr(0, pos);
 }
+
+UINT CodingUtils::GetTargetArchitecture() {
+    if (sizeof(ADDRESS_TYPE) == 8) {
+        return 0x64;
+    }
+
+    return 0x32;
+}

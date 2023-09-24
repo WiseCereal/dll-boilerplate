@@ -3,6 +3,8 @@
 #include "headers/utils/RegistersUtils.h"
 
 
+// todo: add extra x64 registers
+
 BYTE RegistersUtils::MOVInstructionByte(Register r) {
     switch (r) {
     case Register::EAX: case Register::RAX: return 0xB8;
