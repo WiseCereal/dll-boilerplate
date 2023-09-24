@@ -53,6 +53,7 @@ BOOL TestMultipleArguments(ADDRESS_TYPE argumentsAddress) {
 }
 
 BOOL EjectDLL() {
+    HackHandler.Reset();
     return HackHandler.MarkDLLToBeEjected();
 }
 

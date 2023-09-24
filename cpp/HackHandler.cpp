@@ -28,6 +28,7 @@ void Service::Init() {
 
 
 void Service::Reset() {
+    this->hookerService->Reset();
 }
 
 void Service::MainLoop() {
