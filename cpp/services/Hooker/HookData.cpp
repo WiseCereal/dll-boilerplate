@@ -26,12 +26,6 @@ std::vector<BYTE> HookData::GetTrampolineBytes() {
     return this->trampolineBytes;
 }
 
-HookData* HookData::SetTrampolineBytes(std::vector<BYTE> bytes) {
-    this->trampolineBytes = bytes;
-    return this;
-}
-
-
 LPVOID HookData::GetScanStartingAddress() {
     return this->scanStartingAddress;
 }

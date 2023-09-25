@@ -27,12 +27,20 @@ Data::Data() {
     });
 
     this->SetBytesToReplaceAddressOffset("0x38358D");
+}
 
-    // prepare trampoline bytes using x32 or x64 jmp skeleton and then set them
-    // trampoline bytes =  bytesToReplaceArray + jmp skeleton array
-    this->SetTrampolineBytes({
+void Data::PrepareTrampolineBytes(std::vector<BYTE> trampolineSkeleton) {
+    // trampoline bytes =  bytesToReplaceArray + trampolineSkeleton array
+
+    // code should be in HookData main class, and pass only the bytes to be replaced.
+    /*this->SetTrampolineBytes({
         0x90,0x90,0x90,0x90,0x90,0x90,0x90,0x90,0x90,0x90,0x90,0x90,
-    });
+    });*/
+    std::vector<BYTE> a = this->GetBytesToReplace();
+
+    this->trampolineBytes = {
+        0x69,0x69,0x69,0x69,0x69,0x69,0x69,0x69,0x69,0x69,0x69,0x69,
+    };
 }
 
 void Data::InitFeatures() {
@@ -45,7 +53,9 @@ BOOL Data::DirectReadWithOffset() {
 
 std::vector<BYTE>* Data::GetTrampolineBytes(UINT jmpSkeletonSize) {
     HOOK_ADDRESS = (ADDRESS_TYPE)TestHookedCode;
-    RETURN_ADDRESS = (ADDRESS_TYPE)this->GetOriginalAddress() + jmpSkeletonSize;
+
+    // - 2 because the last 2 bytes of the JMP are the POP instruction that we need to execute.
+    RETURN_ADDRESS = (ADDRESS_TYPE)this->GetOriginalAddress() + (jmpSkeletonSize - 2);
 
     return &this->trampolineBytes;
 }

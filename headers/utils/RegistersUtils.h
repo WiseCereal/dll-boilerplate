@@ -17,6 +17,14 @@ namespace RegistersUtils {
     };
 
     struct x64Registers {
+        ULONG64 R15;
+        ULONG64 R14;
+        ULONG64 R13;
+        ULONG64 R12;
+        ULONG64 R11;
+        ULONG64 R10;
+        ULONG64 R9;
+        ULONG64 R8;
         ULONG64 RDI;
         ULONG64 RSI;
         ULONG64 RBP;
@@ -25,14 +33,6 @@ namespace RegistersUtils {
         ULONG64 RDX;
         ULONG64 RCX;
         ULONG64 RAX;
-        ULONG64 R8;
-        ULONG64 R9;
-        ULONG64 R10;
-        ULONG64 R11;
-        ULONG64 R12;
-        ULONG64 R13;
-        ULONG64 R14;
-        ULONG64 R15;
     };
 
     enum class Register {

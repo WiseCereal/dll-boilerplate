@@ -3,6 +3,7 @@
 #include "headers/services/FeaturesHandler/Feature.h"
 #include "headers/services/FeaturesHandler/FeaturesHandler.h"
 #include "headers/services/Hooker/Hooker.h"
+#include "headers/services/Hooker/TrampolineSkeletons.h"
 #include "headers/exceptions/NotFoundException.h"
 #include "headers/utils/CodingUtils.h"
 #include "headers/utils/RegistersUtils.h"
@@ -45,6 +46,8 @@ Service* Service::InitHooks() {
     this->initHookThreads.clear();
     HANDLE t;
     for (auto hook : this->hooksVector) {
+        hook->PrepareTrampolineBytes(this->getTrampolineSkeleton());
+
         t = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Threads::InitAddressesThread, hook, 0, NULL);
         if (t) {
             this->initHookThreads.push_back(t);
@@ -160,7 +163,7 @@ Service* Service::_enableHook(HookerNS::HookData* hookData) {
 
     memset(originalAddress, 0x90, len);
 
-    std::vector<BYTE>* trampolineBytes = hookData->GetTrampolineBytes(this->jmpSkeleton.size());
+    std::vector<BYTE>* trampolineBytes = hookData->GetTrampolineBytes((UINT)this->jmpSkeleton.size());
     ADDRESS_TYPE trampolineBytesAddress = (ADDRESS_TYPE)trampolineBytes->data();
 
     std::vector<BYTE> jmpToTrampolineBytes = this->jmpSkeleton;
@@ -175,32 +178,19 @@ Service* Service::_enableHook(HookerNS::HookData* hookData) {
 
     UINT startIndexOfMovInstruction = 2;
 
-    // Set push $register bytes at the beginning of the jmp
     CodingUtils::ByteArrayReplace(0, &pushRegisterBytes, &jmpToTrampolineBytes);
-
-    // Set mov $register bytes right after the push $register
     CodingUtils::ByteArrayReplace(startIndexOfMovInstruction, &movRegisterBytes, &jmpToTrampolineBytes);
-
-    // Set the trampoline bytes memory address right after mov $register
     CodingUtils::ByteArrayReplace(startIndexOfMovInstruction + movRegisterBytes.size(), &trampolineBytesAddressVector, &jmpToTrampolineBytes);
-
-    // Set the jmp $register bytes
     CodingUtils::ByteArrayReplace(jmpToTrampolineBytes.size() - 5, &jmpRegisterBytes, &jmpToTrampolineBytes);
-
-    // Set pop $register bytes at the end of the jmp
     CodingUtils::ByteArrayReplace(jmpToTrampolineBytes.size() - 2, &popRegisterBytes, &jmpToTrampolineBytes);
 
-    // Finally overwrite the original bytes that were NOPPED at the beginning with the jmp bytes.
     for (size_t i = 0; i < jmpToTrampolineBytes.size(); i++) {
         ADDRESS_TYPE addr = (ADDRESS_TYPE)originalAddress + i;
         memset((LPVOID)addr, jmpToTrampolineBytes.at(i), 1);
     }
 
-    // The trampoline bytes memory protection must be changed so this memory is marked as executable.
     DWORD _;
     VirtualProtect((LPVOID)trampolineBytesAddress, trampolineBytes->size(), PAGE_EXECUTE_READWRITE, &_);
-
-    // Restore original memory protection of the bytes that are changed to the jmp skeleton.
     VirtualProtect(originalAddress, len, originalProtection, &_);
 
     return this;
@@ -251,5 +241,18 @@ Service* Service::initJmpSkeleton() {
     default:
         throw std::exception("Invalid architecture.");
         break;
+    }
+
+    return this;
+}
+
+std::vector<BYTE> Service::getTrampolineSkeleton() {
+    switch (this->architecture) {
+    case 0x86:
+        return TrampolineSkeletons::x86;
+    case 0x64:
+        return TrampolineSkeletons::x64;
+    default:
+        throw std::exception("Invalid architecture");
     }
 }

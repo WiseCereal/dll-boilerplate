@@ -39,6 +39,7 @@ namespace HookerNS {
 
     private:
         Service* initJmpSkeleton();
+        std::vector<BYTE> getTrampolineSkeleton();
         Service* validateHooks();
         HookData* findHook(std::string hookName);
         Service* _enableHook(HookData* hookData);

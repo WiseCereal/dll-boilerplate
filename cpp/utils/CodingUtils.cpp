@@ -20,7 +20,7 @@ bool CodingUtils::WStringContainsWString(std::wstring haystack, std::wstring nee
 
 void CodingUtils::ByteArrayReplace(size_t index, std::vector<BYTE>* replacement, std::vector<BYTE>* byteArray) {
     UINT j = 0;
-    for (UINT i = index; i < index + replacement->size(); i++) {
+    for (size_t i = index; i < index + replacement->size(); i++) {
         byteArray->data()[i] = replacement->data()[j];
         j++;
     }
@@ -83,9 +83,9 @@ UINT CodingUtils::GetTargetArchitecture() {
 ADDRESS_TYPE CodingUtils::ReverseBytes(UINT architecture, ADDRESS_TYPE v) {
     switch (architecture) {
     case 0x86:
-        return _byteswap_ulong(v);
+        return _byteswap_ulong((DWORD32)v);
     case 0x64:
-        return _byteswap_uint64(v);
+        return _byteswap_uint64((ULONG64)v);
     default:
         throw std::exception("Invalid architecture.");
         break;
