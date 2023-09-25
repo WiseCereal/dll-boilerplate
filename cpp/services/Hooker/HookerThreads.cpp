@@ -5,6 +5,7 @@
 #include "headers/services/Hooker/Hooker.h"
 #include "headers/services/Hooker/HookData.h"
 #include "headers/utils/CodingUtils.h"
+#include "headers/services/Hooker/TrampolineSkeletons.h"
 
 using namespace HookerNS;
 
@@ -51,8 +52,23 @@ void Threads::OnInitAddressesThreadFinish(Service* s) {
         }
         hook->SetFeaturesHandler(s->GetFeaturesHandler());
         hook->InitFeatures();
+        hook->PrepareTrampolineBytes(
+            GetTrampolineSkeleton(hook->GetArchitecture()),
+            s->GetJMPSkeleton().size()
+        );
     }
 
     s->EnableAllHooks();
     std::cout << " All Hooks Enabled " << std::endl;
+}
+
+std::vector<BYTE> Threads::GetTrampolineSkeleton(UINT architecture) {
+    switch (architecture) {
+    case 0x86:
+        return TrampolineSkeletons::x86;
+    case 0x64:
+        return TrampolineSkeletons::x64;
+    default:
+        throw std::exception("Invalid architecture");
+    }
 }

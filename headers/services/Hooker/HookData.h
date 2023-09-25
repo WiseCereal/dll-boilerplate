@@ -10,6 +10,7 @@ namespace HookerNS {
     class HookData {
     protected:
         FeaturesHandlerNS::Service* featuresHandler = NULL;
+        UINT architecture = 0;
         std::vector<BYTE> bytesToReplace;
         std::vector<BYTE> trampolineBytes;
         ADDRESS_TYPE bytesToReplaceAddressOffset = 0;
@@ -29,9 +30,11 @@ namespace HookerNS {
         virtual void InitFeatures() = 0;
         virtual BOOL DirectReadWithOffset() = 0;
         virtual RegistersUtils::Register GetRegisterForSafeJump() = 0;
-        virtual void PrepareTrampolineBytes(std::vector<BYTE> trampolineSkeleton) = 0;
+        virtual void PrepareTrampolineBytes(std::vector<BYTE> trampolineSkeleton, UINT jmpSkeletonSize) = 0;
 
         void Reset();
+        void SetArchitecture(UINT v);
+        UINT GetArchitecture();
         std::vector<BYTE> GetBytesToReplace();
         HookData* SetBytesToReplace(std::vector<BYTE> bytes);
         std::vector<BYTE> GetTrampolineBytes();

@@ -24,7 +24,7 @@ namespace HooksNS {
             void InitFeatures();
             BOOL DirectReadWithOffset();
             RegistersUtils::Register GetRegisterForSafeJump();
-            void PrepareTrampolineBytes(std::vector<BYTE> trampolineSkeleton);
+            void PrepareTrampolineBytes(std::vector<BYTE> trampolineSkeleton, UINT jmpSkeletonSize);
 
             std::string GetName() {
                 return NAME;

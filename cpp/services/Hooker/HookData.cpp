@@ -13,6 +13,13 @@ void HookData::Reset() {
     this->scanEndingAddress = (LPVOID)(ADDRESS_TYPE)0x00007FFFFFFFFFFF;
 }
 
+void HookData::SetArchitecture(UINT v) {
+    this->architecture = v;
+}
+UINT HookData::GetArchitecture() {
+    return this->architecture;
+}
+
 std::vector<BYTE> HookData::GetBytesToReplace() {
     return this->bytesToReplace;
 }

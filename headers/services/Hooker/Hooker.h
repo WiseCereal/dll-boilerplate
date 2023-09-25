@@ -36,10 +36,10 @@ namespace HookerNS {
         std::vector<HookData*> GetHooksVector();
         std::vector<HANDLE> GetInitHookThreads();
         FeaturesHandlerNS::Service* GetFeaturesHandler();
+        std::vector<BYTE> GetJMPSkeleton();
 
     private:
         Service* initJmpSkeleton();
-        std::vector<BYTE> getTrampolineSkeleton();
         Service* validateHooks();
         HookData* findHook(std::string hookName);
         Service* _enableHook(HookData* hookData);
@@ -51,6 +51,8 @@ namespace HookerNS {
         void InitAddressesThread(HookData* hook);
 
         void OnInitAddressesThreadFinish(Service* s);
+
+        std::vector<BYTE> GetTrampolineSkeleton(UINT architecture);
 
     }
 

@@ -41,4 +41,5 @@ namespace CodingUtils {
     UINT GetTargetArchitecture();
 
     ADDRESS_TYPE ReverseBytes(UINT architecture, ADDRESS_TYPE v);
+
 }

@@ -3,7 +3,6 @@
 #include "headers/services/FeaturesHandler/Feature.h"
 #include "headers/services/FeaturesHandler/FeaturesHandler.h"
 #include "headers/services/Hooker/Hooker.h"
-#include "headers/services/Hooker/TrampolineSkeletons.h"
 #include "headers/exceptions/NotFoundException.h"
 #include "headers/utils/CodingUtils.h"
 #include "headers/utils/RegistersUtils.h"
@@ -46,7 +45,7 @@ Service* Service::InitHooks() {
     this->initHookThreads.clear();
     HANDLE t;
     for (auto hook : this->hooksVector) {
-        hook->PrepareTrampolineBytes(this->getTrampolineSkeleton());
+        hook->SetArchitecture(this->architecture);
 
         t = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Threads::InitAddressesThread, hook, 0, NULL);
         if (t) {
@@ -114,6 +113,10 @@ std::vector<HANDLE> Service::GetInitHookThreads() {
 
 FeaturesHandlerNS::Service* Service::GetFeaturesHandler() {
     return this->featuresHandler;
+}
+
+std::vector<BYTE> Service::GetJMPSkeleton() {
+    return this->jmpSkeleton;
 }
 
 Service* Service::validateHooks() {
@@ -244,15 +247,4 @@ Service* Service::initJmpSkeleton() {
     }
 
     return this;
-}
-
-std::vector<BYTE> Service::getTrampolineSkeleton() {
-    switch (this->architecture) {
-    case 0x86:
-        return TrampolineSkeletons::x86;
-    case 0x64:
-        return TrampolineSkeletons::x64;
-    default:
-        throw std::exception("Invalid architecture");
-    }
 }
