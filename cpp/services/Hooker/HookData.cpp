@@ -20,6 +20,10 @@ UINT HookData::GetArchitecture() {
     return this->architecture;
 }
 
+std::vector<BYTE>* HookData::GetTrampolineBytes() {
+    return &this->trampolineBytes;
+}
+
 std::vector<BYTE> HookData::GetBytesToReplace() {
     return this->bytesToReplace;
 }
@@ -29,9 +33,6 @@ HookData* HookData::SetBytesToReplace(std::vector<BYTE> bytes) {
     return this;
 }
 
-std::vector<BYTE> HookData::GetTrampolineBytes() {
-    return this->trampolineBytes;
-}
 
 LPVOID HookData::GetScanStartingAddress() {
     return this->scanStartingAddress;

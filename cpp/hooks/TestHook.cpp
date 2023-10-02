@@ -10,22 +10,22 @@ using namespace HooksNS::TestHook;
 
 
 void TestHookedCode() {
-    ADDRESS_TYPE rax;
-    ADDRESS_TYPE rcx;
-    ADDRESS_TYPE rdx;
-    ADDRESS_TYPE rbx;
-    ADDRESS_TYPE rsp;
-    ADDRESS_TYPE rbp;
-    ADDRESS_TYPE rsi;
-    ADDRESS_TYPE rdi;
-    ADDRESS_TYPE r8;
-    ADDRESS_TYPE r9;
-    ADDRESS_TYPE r10;
-    ADDRESS_TYPE r11;
-    ADDRESS_TYPE r12;
-    ADDRESS_TYPE r13;
-    ADDRESS_TYPE r14;
-    ADDRESS_TYPE r15;
+    ADDRESS_TYPE rax = 0x0;
+    ADDRESS_TYPE rcx = 0x0;
+    ADDRESS_TYPE rdx = 0x0;
+    ADDRESS_TYPE rbx = 0x0;
+    ADDRESS_TYPE rsp = 0x0;
+    ADDRESS_TYPE rbp = 0x0;
+    ADDRESS_TYPE rsi = 0x0;
+    ADDRESS_TYPE rdi = 0x0;
+    ADDRESS_TYPE r8 = 0x0;
+    ADDRESS_TYPE r9 = 0x0;
+    ADDRESS_TYPE r10 = 0x0;
+    ADDRESS_TYPE r11 = 0x0;
+    ADDRESS_TYPE r12 = 0x0;
+    ADDRESS_TYPE r13 = 0x0;
+    ADDRESS_TYPE r14 = 0x0;
+    ADDRESS_TYPE r15 = 0x0;
 
     asm("mov %%rax, %0" : "=r" (rax));
     asm("mov %%rcx, %0" : "=r" (rcx));
@@ -79,7 +79,7 @@ void Data::PrepareTrampolineBytes(std::vector<BYTE> trampolineSkeleton, UINT jmp
 
     std::vector<BYTE> functionAddressVector = CodingUtils::ToReversedBytesVector((ADDRESS_TYPE)TestHookedCode);
     std::vector<BYTE> originalAddressVector = CodingUtils::ToReversedBytesVector(
-        (ADDRESS_TYPE)this->GetOriginalAddress() + (jmpSkeletonSize - 2)
+        (ADDRESS_TYPE)this->GetOriginalAddress() + (ADDRESS_TYPE)(jmpSkeletonSize - 2)
     );
 
     RegistersUtils::Register registerToUse = this->GetRegisterForSafeJump();
@@ -116,15 +116,6 @@ void Data::InitFeatures() {
 
 BOOL Data::DirectReadWithOffset() {
     return TRUE;
-}
-
-std::vector<BYTE>* Data::GetTrampolineBytes(UINT jmpSkeletonSize) {
-    HOOK_ADDRESS = (ADDRESS_TYPE)TestHookedCode;
-
-    // - 2 because the last 2 bytes of the JMP are the POP instruction that we need to execute.
-    RETURN_ADDRESS = (ADDRESS_TYPE)this->GetOriginalAddress() + (jmpSkeletonSize - 2);
-
-    return &this->trampolineBytes;
 }
 
 RegistersUtils::Register Data::GetRegisterForSafeJump() {

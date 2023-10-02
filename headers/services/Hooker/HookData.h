@@ -26,7 +26,6 @@ namespace HookerNS {
     public:
         virtual ~HookData() {}
         virtual std::string GetName() = 0;
-        virtual std::vector<BYTE>* GetTrampolineBytes(UINT jmpSkeletonSize) = 0;
         virtual void InitFeatures() = 0;
         virtual BOOL DirectReadWithOffset() = 0;
         virtual RegistersUtils::Register GetRegisterForSafeJump() = 0;
@@ -35,9 +34,9 @@ namespace HookerNS {
         void Reset();
         void SetArchitecture(UINT v);
         UINT GetArchitecture();
+        std::vector<BYTE>* GetTrampolineBytes();
         std::vector<BYTE> GetBytesToReplace();
         HookData* SetBytesToReplace(std::vector<BYTE> bytes);
-        std::vector<BYTE> GetTrampolineBytes();
         LPVOID GetScanStartingAddress();
         HookData* SetScanStartingAddress(LPVOID address);
         LPVOID GetScanEndingAddress();

@@ -166,7 +166,7 @@ Service* Service::_enableHook(HookerNS::HookData* hookData) {
 
     memset(originalAddress, 0x90, len);
 
-    std::vector<BYTE>* trampolineBytes = hookData->GetTrampolineBytes((UINT)this->jmpSkeleton.size());
+    std::vector<BYTE>* trampolineBytes = hookData->GetTrampolineBytes();
     ADDRESS_TYPE trampolineBytesAddress = (ADDRESS_TYPE)trampolineBytes->data();
 
     std::vector<BYTE> jmpToTrampolineBytes = this->jmpSkeleton;

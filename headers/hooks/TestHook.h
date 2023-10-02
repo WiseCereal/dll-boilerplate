@@ -3,6 +3,7 @@
 #include "headers/pch.h"
 #include "headers/utils/RegistersUtils.h"
 #include "headers/features/TestFeature.h"
+#include "headers/services/Hooker/HookData.h"
 
 
 namespace HooksNS {
@@ -14,8 +15,6 @@ namespace HooksNS {
         }
 
         static const std::string NAME = "Test";
-        static ADDRESS_TYPE HOOK_ADDRESS = 0;
-        static ADDRESS_TYPE RETURN_ADDRESS = 0;
 
         class Data : public HookerNS::HookData {
         public:
