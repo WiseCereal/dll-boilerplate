@@ -102,9 +102,9 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate";
-COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate\node_modules\electron\dist\resources";
-COPY /B  "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_node_addon_boilerplate\app-1.0.0\resources"</Command>
+      <Command>echo d | xcopy /c /y "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Boilerplates\Electron"
+echo d | xcopy /c /y "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Boilerplates\Electron\node_modules\electron\dist\resources"
+echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_node_addon_boilerplate\app-1.0.0\resources"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -127,9 +127,9 @@ COPY /B  "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_node_addon_bo
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate";
-COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate\node_modules\electron\dist\resources";
-COPY /B  "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_node_addon_boilerplate\app-1.0.0\resources"</Command>
+      <Command>echo d | xcopy /c /y "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Boilerplates\Electron"
+echo d | xcopy /c /y "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Boilerplates\Electron\node_modules\electron\dist\resources"
+echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_node_addon_boilerplate\app-1.0.0\resources"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -148,9 +148,9 @@ COPY /B  "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_node_addon_bo
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate";
-COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate\node_modules\electron\dist\resources";
-COPY /B  "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_node_addon_boilerplate\app-1.0.0\resources"</Command>
+      <Command>echo d | xcopy /c /y "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Boilerplates\Electron"
+echo d | xcopy /c /y "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Boilerplates\Electron\node_modules\electron\dist\resources"
+echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_node_addon_boilerplate\app-1.0.0\resources"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -173,9 +173,9 @@ COPY /B  "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_node_addon_bo
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate";
-COPY /B "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Frontends\electron-ts-node-addon-boilerplate\node_modules\electron\dist\resources";
-COPY /B  "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_node_addon_boilerplate\app-1.0.0\resources"</Command>
+      <Command>echo d | xcopy /c /y "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Boilerplates\Electron"
+echo d | xcopy /c /y "$(TargetPath)" "E:\Projects\Hacks Dev\Code\Boilerplates\Electron\node_modules\electron\dist\resources"
+echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_node_addon_boilerplate\app-1.0.0\resources"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
