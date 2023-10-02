@@ -17,6 +17,7 @@ namespace HookerNS {
         std::vector<HookData*> hooksVector;
         std::vector<HANDLE> initHookThreads;
         std::vector<BYTE> jmpSkeleton;
+        std::vector<BYTE> trampolineSkeleton;
 
     public:
         Service(
@@ -36,14 +37,14 @@ namespace HookerNS {
         std::vector<HookData*> GetHooksVector();
         std::vector<HANDLE> GetInitHookThreads();
         FeaturesHandlerNS::Service* GetFeaturesHandler();
-        std::vector<BYTE> GetJMPSkeleton();
 
     private:
-        Service* initJmpSkeleton();
+        Service* initSkeletons();
         Service* validateHooks();
         HookData* findHook(std::string hookName);
         Service* _enableHook(HookData* hookData);
         Service* _disableHook(HookData* hookData);
+        std::vector<BYTE> prepareTrampolineBytes(HookData* hookData);
     };
 
     namespace Threads {
@@ -51,8 +52,6 @@ namespace HookerNS {
         void InitAddressesThread(HookData* hook);
 
         void OnInitAddressesThreadFinish(Service* s);
-
-        std::vector<BYTE> GetTrampolineSkeleton(UINT architecture);
 
     }
 

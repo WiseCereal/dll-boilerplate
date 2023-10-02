@@ -43,8 +43,6 @@ void TestHookedCode() {
     asm("mov %%r13, %0" : "=r" (r13));
     asm("mov %%r14, %0" : "=r" (r14));
     asm("mov %%r15, %0" : "=r" (r15));
-
-    std::cout << rax << std::endl;
 }
 
 
@@ -62,52 +60,12 @@ Data::Data() {
     this->SetBytesToReplaceAddressOffset("0x383585");
 }
 
-void Data::PrepareTrampolineBytes(std::vector<BYTE> trampolineSkeleton, UINT jmpSkeletonSize) {
-    if (this->architecture != 0x86 && this->architecture != 0x64) {
-        throw std::exception("Invalid architecture");
-    }
+ADDRESS_TYPE Data::GetHookFunctionAddress() {
+    return (ADDRESS_TYPE)TestHookedCode;
+}
 
-    std::vector<BYTE> trampoline = this->GetBytesToReplace();
-    trampoline.insert(trampoline.end(), trampolineSkeleton.begin(), trampolineSkeleton.end());
-        
-    UINT index;
-    if (this->architecture == 0x86) {
-        index = this->GetBytesToReplace().size() + 2;
-    } else {
-        index = this->GetBytesToReplace().size() + 33;
-    }
-
-    std::vector<BYTE> functionAddressVector = CodingUtils::ToReversedBytesVector((ADDRESS_TYPE)TestHookedCode);
-    std::vector<BYTE> originalAddressVector = CodingUtils::ToReversedBytesVector(
-        (ADDRESS_TYPE)this->GetOriginalAddress() + (ADDRESS_TYPE)(jmpSkeletonSize - 2)
-    );
-
-    RegistersUtils::Register registerToUse = this->GetRegisterForSafeJump();
-
-    std::vector<BYTE> movRegisterBytes = RegistersUtils::MOVInstructionBytes(registerToUse);
-    CodingUtils::ByteArrayReplace(index, &movRegisterBytes, &trampoline);
-    index = index + movRegisterBytes.size();
-    CodingUtils::ByteArrayReplace(index, &functionAddressVector, &trampoline);
-
-    index = index + sizeof(ADDRESS_TYPE);
-    std::vector<BYTE> callRegisterBytes = RegistersUtils::CALLInstructionBytes(registerToUse);
-    CodingUtils::ByteArrayReplace(index, &callRegisterBytes, &trampoline);
-
-    index = index + callRegisterBytes.size();
-    if (this->architecture == 0x86) {
-        index = index + 2;
-    } else {
-        index = index + 33;
-    }
-    CodingUtils::ByteArrayReplace(index, &movRegisterBytes, &trampoline);
-    index = index + movRegisterBytes.size();
-    CodingUtils::ByteArrayReplace(index, &originalAddressVector, &trampoline);
-    index = index + sizeof(ADDRESS_TYPE);
-
-    std::vector<BYTE> jmpRegisterBytes = RegistersUtils::JMPInstructionBytes(registerToUse);
-    CodingUtils::ByteArrayReplace(index, &jmpRegisterBytes, &trampoline);
-
-    this->trampolineBytes = trampoline;
+HookerNS::OriginalBytesBehaviour Data::GetOriginalBytesBehaviour() {
+    return HookerNS::OriginalBytesBehaviour::BeforeFunctionCall;
 }
 
 void Data::InitFeatures() {

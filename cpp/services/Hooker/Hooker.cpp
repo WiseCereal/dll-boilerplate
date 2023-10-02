@@ -3,6 +3,7 @@
 #include "headers/services/FeaturesHandler/Feature.h"
 #include "headers/services/FeaturesHandler/FeaturesHandler.h"
 #include "headers/services/Hooker/Hooker.h"
+#include "headers/services/Hooker/Skeletons.h"
 #include "headers/exceptions/NotFoundException.h"
 #include "headers/utils/CodingUtils.h"
 #include "headers/utils/RegistersUtils.h"
@@ -16,7 +17,7 @@ Service::Service(
     this->architecture = architecture;
     this->featuresHandler = featuresHandler;
 
-    this->initJmpSkeleton();
+    this->initSkeletons();
 
     this->hooksVector.push_back(&this->testHook);
 
@@ -45,8 +46,6 @@ Service* Service::InitHooks() {
     this->initHookThreads.clear();
     HANDLE t;
     for (auto hook : this->hooksVector) {
-        hook->SetArchitecture(this->architecture);
-
         t = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Threads::InitAddressesThread, hook, 0, NULL);
         if (t) {
             this->initHookThreads.push_back(t);
@@ -115,9 +114,6 @@ FeaturesHandlerNS::Service* Service::GetFeaturesHandler() {
     return this->featuresHandler;
 }
 
-std::vector<BYTE> Service::GetJMPSkeleton() {
-    return this->jmpSkeleton;
-}
 
 Service* Service::validateHooks() {
     std::vector<std::string> hooksNames;
@@ -166,7 +162,9 @@ Service* Service::_enableHook(HookerNS::HookData* hookData) {
 
     memset(originalAddress, 0x90, len);
 
+    hookData->SetTrampolineBytes(this->prepareTrampolineBytes(hookData));
     std::vector<BYTE>* trampolineBytes = hookData->GetTrampolineBytes();
+
     ADDRESS_TYPE trampolineBytesAddress = (ADDRESS_TYPE)trampolineBytes->data();
 
     std::vector<BYTE> jmpToTrampolineBytes = this->jmpSkeleton;
@@ -222,23 +220,72 @@ Service* Service::_disableHook(HookerNS::HookData* hookData) {
     return this;
 }
 
-Service* Service::initJmpSkeleton() {
+std::vector<BYTE> Service::prepareTrampolineBytes(HookData* hookData) {
+    if (this->architecture != 0x86 && this->architecture != 0x64) {
+        throw std::exception("Invalid architecture");
+    }
+
+    std::vector<BYTE> trampoline = {};
+    switch (hookData->GetOriginalBytesBehaviour()) {
+    case OriginalBytesBehaviour::BeforeFunctionCall:
+        trampoline = hookData->GetBytesToReplace();
+        trampoline.insert(trampoline.end(), this->trampolineSkeleton.begin(), this->trampolineSkeleton.end());
+        break;
+    case OriginalBytesBehaviour::AfterFunctionCall:
+        throw std::exception("Not implemented yet // TODO");
+    case OriginalBytesBehaviour::Remove:
+        throw std::exception("Not implemented yet // TODO");
+    }
+
+    std::vector<BYTE> functionAddressVector = CodingUtils::ToReversedBytesVector(hookData->GetHookFunctionAddress());
+    std::vector<BYTE> originalAddressVector = CodingUtils::ToReversedBytesVector(
+        (ADDRESS_TYPE)hookData->GetOriginalAddress() + (ADDRESS_TYPE)(this->jmpSkeleton.size() - 2)
+    );
+
+    UINT index;
+    if (this->architecture == 0x86) {
+        index = hookData->GetBytesToReplace().size() + 2;
+    }
+    else {
+        index = hookData->GetBytesToReplace().size() + 33;
+    }
+
+    RegistersUtils::Register registerToUse = hookData->GetRegisterForSafeJump();
+    std::vector<BYTE> movRegisterBytes = RegistersUtils::MOVInstructionBytes(registerToUse);
+    CodingUtils::ByteArrayReplace(index, &movRegisterBytes, &trampoline);
+    index = index + movRegisterBytes.size();
+    CodingUtils::ByteArrayReplace(index, &functionAddressVector, &trampoline);
+
+    index = index + sizeof(ADDRESS_TYPE);
+    std::vector<BYTE> callRegisterBytes = RegistersUtils::CALLInstructionBytes(registerToUse);
+    CodingUtils::ByteArrayReplace(index, &callRegisterBytes, &trampoline);
+
+    index = index + callRegisterBytes.size();
+    if (this->architecture == 0x86) {
+        index = index + 2;
+    } else {
+        index = index + 33;
+    }
+    CodingUtils::ByteArrayReplace(index, &movRegisterBytes, &trampoline);
+    index = index + movRegisterBytes.size();
+    CodingUtils::ByteArrayReplace(index, &originalAddressVector, &trampoline);
+    index = index + sizeof(ADDRESS_TYPE);
+
+    std::vector<BYTE> jmpRegisterBytes = RegistersUtils::JMPInstructionBytes(registerToUse);
+    CodingUtils::ByteArrayReplace(index, &jmpRegisterBytes, &trampoline);
+
+    return trampoline;
+}
+
+Service* Service::initSkeletons() {
     switch (this->architecture) {
     case 0x86:
-        this->jmpSkeleton = {
-            0x00, 0x00, // push $register
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // mov $register, $address
-            0x00, 0x00, 0x00, // jmp $register,
-            0x00, 0x00 // pop $register
-        };
+        this->jmpSkeleton = Skeletons::x86Jump;
+        this->trampolineSkeleton = Skeletons::x86Trampoline;
         break;
     case 0x64:
-        this->jmpSkeleton = {
-            0x00, 0x00, // push $register
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // mov $register, $address
-            0x00, 0x00, 0x00, // jmp $register
-            0x00, 0x00 // pop $register
-        };
+        this->jmpSkeleton = Skeletons::x64Jump;
+        this->trampolineSkeleton = Skeletons::x64Trampoline;
         break;
 
     default:

@@ -4,9 +4,23 @@
 
 namespace HookerNS {
 
-    namespace TrampolineSkeletons {
+    namespace Skeletons {
 
-        const std::vector<BYTE> x86 = {
+        const std::vector<BYTE> x86Jump = {
+            0x00, 0x00, // push $register
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // mov $register, $address
+            0x00, 0x00, 0x00, // jmp $register,
+            0x00, 0x00 // pop $register
+        };
+
+        const std::vector<BYTE> x64Jump = {
+            0x00, 0x00, // push $register
+            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // mov $register, $address
+            0x00, 0x00, 0x00, // jmp $register
+            0x00, 0x00 // pop $register
+        };
+
+        const std::vector<BYTE> x86Trampoline = {
             0x9c, 0x60, // pushf and pusha
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // mov $register, $custom_dll_function_address
             0x00, 0x00, 0x00, // call $register
@@ -15,7 +29,7 @@ namespace HookerNS {
             0x00, 0x00, 0x00 // jmp $register
         };
 
-        const std::vector<BYTE> x64 = {
+        const std::vector<BYTE> x64Trampoline = {
             0x9C, // push flags,
             0x90, 0x50, // NOP + push rax
             0x90, 0x51, // NOP + push rcx

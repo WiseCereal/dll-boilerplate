@@ -23,7 +23,8 @@ namespace HooksNS {
             void InitFeatures();
             BOOL DirectReadWithOffset();
             RegistersUtils::Register GetRegisterForSafeJump();
-            void PrepareTrampolineBytes(std::vector<BYTE> trampolineSkeleton, UINT jmpSkeletonSize);
+            ADDRESS_TYPE GetHookFunctionAddress();
+            HookerNS::OriginalBytesBehaviour GetOriginalBytesBehaviour();
 
             std::string GetName() {
                 return NAME;

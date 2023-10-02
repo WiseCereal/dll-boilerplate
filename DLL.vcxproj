@@ -218,7 +218,7 @@ echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_n
     <ClInclude Include="headers\services\FeaturesHandler\FeaturesHandler.h" />
     <ClInclude Include="headers\services\Hooker\HookData.h" />
     <ClInclude Include="headers\services\Hooker\Hooker.h" />
-    <ClInclude Include="headers\services\Hooker\TrampolineSkeletons.h" />
+    <ClInclude Include="headers\services\Hooker\Skeletons.h" />
     <ClInclude Include="headers\utils\AddressUtils.h" />
     <ClInclude Include="headers\utils\CodingUtils.h" />
     <ClInclude Include="headers\utils\RegistersUtils.h" />

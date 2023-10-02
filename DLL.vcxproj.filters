@@ -122,7 +122,7 @@
     <ClInclude Include="headers\utils\RegistersUtils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="headers\services\Hooker\TrampolineSkeletons.h">
+    <ClInclude Include="headers\services\Hooker\Skeletons.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
