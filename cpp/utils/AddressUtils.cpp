@@ -35,6 +35,7 @@ ADDRESS_TYPE* AddressUtils::GetPointerPathFinalAddress(ADDRESS_TYPE baseAddress,
 ADDRESS_TYPE* AddressUtils::GetByScanningBytes(ADDRESS_TYPE startAt, ADDRESS_TYPE endAt, UINT skip, std::vector<BYTE> bytesToFind, std::function<BOOL()> shouldStopCallback) {
     ADDRESS_TYPE currentAddress = startAt;
 
+    HANDLE ownProcessHandle = GetCurrentProcess();
     while (currentAddress < endAt) {
         if (shouldStopCallback()) {
             return 0;
@@ -45,20 +46,11 @@ ADDRESS_TYPE* AddressUtils::GetByScanningBytes(ADDRESS_TYPE startAt, ADDRESS_TYP
             return 0;
         }
 
-        std::vector<BYTE> bytesToRead;
-        ADDRESS_TYPE reatAt = currentAddress;
-        for (size_t i = 0; i < bytesToFind.size(); i++) {
-            try {
-                bytesToRead.push_back((*(BYTE*)reatAt));
+        std::vector<BYTE> bytesToRead(bytesToFind.size());
+        if (ReadProcessMemory(ownProcessHandle, (LPVOID)currentAddress, bytesToRead.data(), bytesToFind.size(), NULL)) {
+            if (bytesToRead == bytesToFind) {
+                return (ADDRESS_TYPE*)currentAddress;
             }
-            catch (...) {
-
-            }
-            reatAt = reatAt + 1;
-        }
-
-        if (bytesToRead == bytesToFind) {
-            return (ADDRESS_TYPE*)currentAddress;
         }
 
         currentAddress = currentAddress + skip;
