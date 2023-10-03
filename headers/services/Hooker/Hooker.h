@@ -27,7 +27,7 @@ namespace HookerNS {
 
         Service* SetBaseAddress(LPVOID addr);
         LPVOID GetBaseAddress();
-        Service* InitHooks();
+        Service* InitHooks(std::function<void()> onFinishCallback);
         BOOL AreThereAnyInitAddressThreadsRunning();
         Service* Reset();
         Service* EnableHook(std::string hookName);

@@ -30,6 +30,7 @@ namespace HackHandlerNS {
         BOOL ShouldDLLBeEjected();
         BOOL IsReady();
         void MarkAsReady();
+        HookerNS::Service* GetHookerService();
 
     private:
         BOOL isReady = FALSE;

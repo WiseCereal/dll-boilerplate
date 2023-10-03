@@ -17,12 +17,14 @@ Service::Service(
     this->featuresHandler = featuresHandler;
 }
 
-void InitThread(Service* handler) {
-    Sleep(1000);
-    handler->MarkAsReady();
+void __stdcall InitThread(Service* handler) {
+    handler->GetHookerService()->InitHooks(
+        [handler]() {
+            handler->MarkAsReady();
+        }
+    );
 }
 void Service::Init() {
-    this->hookerService->InitHooks();
     CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)InitThread, this, 0, NULL);
 }
 
@@ -53,6 +55,11 @@ BOOL Service::IsReady() {
 void Service::MarkAsReady() {
     this->isReady = TRUE;
 }
+
+HookerNS::Service* Service::GetHookerService() {
+    return this->hookerService;
+}
+
 
 void Service::checkEjectDLLKeysCombination() {
     for (auto key : EJECT_DLL_KEYS_COMBINATION)

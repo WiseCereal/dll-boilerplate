@@ -42,7 +42,7 @@ std::vector<HookerNS::HookData*> Service::GetHooksVector() {
     return this->hooksVector;
 }
 
-Service* Service::InitHooks() {
+Service* Service::InitHooks(std::function<void()> onFinishCallback) {
     this->initHookThreads.clear();
     HANDLE t;
     for (auto hook : this->hooksVector) {
@@ -64,6 +64,8 @@ Service* Service::InitHooks() {
     else {
         throw std::runtime_error("Error while creating the thread that waits for the hook init threads to finish ");
     }
+
+    onFinishCallback();
 
     return this;
 }
