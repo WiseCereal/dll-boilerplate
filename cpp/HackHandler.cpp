@@ -17,7 +17,7 @@ Service::Service(
     this->featuresHandler = featuresHandler;
 }
 
-void __stdcall InitThread(Service* handler) {
+void InitThread(Service* handler) {
     handler->GetHookerService()->InitHooks(
         [handler]() {
             handler->MarkAsReady();
@@ -53,6 +53,7 @@ BOOL Service::IsReady() {
 }
 
 void Service::MarkAsReady() {
+    std::cout << "Everything ready" << std::endl;
     this->isReady = TRUE;
 }
 
