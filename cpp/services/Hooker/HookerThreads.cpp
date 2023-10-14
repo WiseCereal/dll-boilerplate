@@ -22,6 +22,7 @@ void Threads::InitAddressesThread(HookData* hook) {
     else {
         hook->SetScanStartingAddress(baseModuleAddress);
         auto addr = AddressUtils::GetByScanningBytes(
+            GetCurrentProcess(),
             (ADDRESS_TYPE)hook->GetScanStartingAddress() + hook->GetBytesToReplaceAddressOffset(),
             (ADDRESS_TYPE)hook->GetScanEndingAddress(),
             hook->GetAmountOfBytesToSkipBetweenScans(),
