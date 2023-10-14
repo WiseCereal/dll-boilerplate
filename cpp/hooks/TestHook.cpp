@@ -1,7 +1,7 @@
 #include "headers/pch.h"
 
 #include "headers/utils/RegistersUtils.h"
-#include "headers/services/FeaturesHandler/FeaturesHandler.h"
+#include "headers/services/Features/Service.h"
 #include "headers/services/Hooker/HookData.h"
 #include "headers/hooks/TestHook.h"
 #include "headers/utils/CodingUtils.h"
@@ -69,7 +69,7 @@ HookerNS::OriginalBytesBehaviour Data::GetOriginalBytesBehaviour() {
 }
 
 void Data::InitFeatures() {
-    Features::TEST_FEATURE = (FeaturesNS::TestFeatureNS::Feature*)this->featuresHandler->GetFeature(FeaturesNS::TestFeatureNS::NAME);
+    Features::TEST_FEATURE = (FeaturesNS::TestFeatureNS::Feature*)this->featuresService->GetFeature(FeaturesNS::TestFeatureNS::NAME);
 }
 
 BOOL Data::DirectReadWithOffset() {

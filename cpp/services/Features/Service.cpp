@@ -1,10 +1,10 @@
 #include "headers/pch.h"
 
-#include "headers/services/FeaturesHandler/Feature.h"
-#include "headers/services/FeaturesHandler/FeaturesHandler.h"
+#include "headers/services/Features/Feature.h"
+#include "headers/services/Features/Service.h"
 #include "headers/exceptions/NotFoundException.h"
 
-using namespace FeaturesHandlerNS;
+using namespace FeaturesNS;
 
 Service::Service() {
     this->featuresVector.push_back(&this->testFeature);

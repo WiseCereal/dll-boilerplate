@@ -2,7 +2,7 @@
 
 #include "headers/services/Hooker/HookData.h"
 #include "headers/utils/CodingUtils.h"
-#include "headers/services/FeaturesHandler/FeaturesHandler.h"
+#include "headers/services/Features/Service.h"
 
 using namespace HookerNS;
 
@@ -103,8 +103,8 @@ UINT HookData::GetAmountOfBytesToSkipBetweenScans() {
     return CodingUtils::HexStringToInt(skipStr);
 }
 
-HookData* HookData::SetFeaturesHandler(FeaturesHandlerNS::Service* featuresHandler) {
-    this->featuresHandler = featuresHandler;
+HookData* HookData::SetFeaturesService(FeaturesNS::Service* featuresService) {
+    this->featuresService = featuresService;
 
     return this;
 }

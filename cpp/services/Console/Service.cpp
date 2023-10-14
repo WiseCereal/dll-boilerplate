@@ -1,12 +1,12 @@
 #include "headers/pch.h"
 
-#include "headers/services/ConsoleHandler.h"
+#include "headers/services/Console/Service.h"
 
-using namespace ConsoleHandlerNS;
+using namespace ConsoleNS;
 
-Handler::Handler() {}
+Service::Service() {}
 
-BOOL Handler::OpenConsole() {
+BOOL Service::OpenConsole() {
 	UINT maxTries = 20;
 	UINT delayBetweenTriesInMs = 2000;
 	UINT i = 0;
@@ -32,7 +32,7 @@ BOOL Handler::OpenConsole() {
 }
 
 
-BOOL Handler::CloseConsole() {
+BOOL Service::CloseConsole() {
 	if (this->file) {
 		auto err = fclose(this->file);
 		if (err) {

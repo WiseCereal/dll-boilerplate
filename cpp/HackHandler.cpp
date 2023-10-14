@@ -2,8 +2,8 @@
 
 #include "headers/HackHandler.h"
 
-#include "headers/services/FeaturesHandler/FeaturesHandler.h"
-#include "headers/services/Hooker/Hooker.h"
+#include "headers/services/Features/Service.h"
+#include "headers/services/Hooker/Service.h"
 
 
 using namespace HackHandlerNS;
@@ -11,10 +11,10 @@ using namespace HackHandlerNS;
 
 Service::Service(
     HookerNS::Service* hookerService,
-    FeaturesHandlerNS::Service* featuresHandler
+    FeaturesNS::Service* featuresService
 ) {
     this->hookerService = hookerService;
-    this->featuresHandler = featuresHandler;
+    this->featuresService = featuresService;
 }
 
 void InitThread(Service* handler) {

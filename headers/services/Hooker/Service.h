@@ -2,14 +2,14 @@
 
 #include "headers/pch.h"
 
-#include "headers/services/FeaturesHandler/FeaturesHandler.h"
+#include "headers/services/Features/Service.h"
 #include "headers/services/Hooker/HookData.h"
 #include "headers/hooks/TestHook.h"
 
 namespace HookerNS {
     class Service {
     private:
-        FeaturesHandlerNS::Service* featuresHandler;
+        FeaturesNS::Service* featuresService;
         UINT architecture;
 
         HooksNS::TestHook::Data testHook;
@@ -22,7 +22,7 @@ namespace HookerNS {
     public:
         Service(
             UINT architecture,
-            FeaturesHandlerNS::Service* featuresHandler
+            FeaturesNS::Service* featuresService
         );
 
         Service* SetBaseAddress(LPVOID addr);
@@ -36,7 +36,7 @@ namespace HookerNS {
         Service* DisableAllHooks();
         std::vector<HookData*> GetHooksVector();
         std::vector<HANDLE> GetInitHookThreads();
-        FeaturesHandlerNS::Service* GetFeaturesHandler();
+        FeaturesNS::Service* GetFeaturesService();
 
     private:
         Service* initSkeletons();

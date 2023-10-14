@@ -2,14 +2,14 @@
 
 #include "headers/pch.h"
 
-#include "headers/services/FeaturesHandler/Feature.h"
+#include "headers/services/Features/Feature.h"
 #include "headers/features/TestFeature.h"
 
-namespace FeaturesHandlerNS {
+namespace FeaturesNS {
 
     class Service {
     private:
-        FeaturesNS::TestFeatureNS::Feature testFeature;
+        TestFeatureNS::Feature testFeature;
 
         std::vector<Feature*> featuresVector;
 

@@ -3,7 +3,7 @@
 #include "headers/pch.h"
 #include "headers/utils/CodingUtils.h"
 #include "headers/utils/RegistersUtils.h"
-#include "headers/services/FeaturesHandler/FeaturesHandler.h"
+#include "headers/services/Features/Service.h"
 
 namespace HookerNS {
 
@@ -15,7 +15,7 @@ namespace HookerNS {
 
     class HookData {
     protected:
-        FeaturesHandlerNS::Service* featuresHandler = NULL;
+        FeaturesNS::Service* featuresService = NULL;
         std::vector<BYTE> bytesToReplace;
         std::vector<BYTE> trampolineBytes;
         ADDRESS_TYPE bytesToReplaceAddressOffset = 0;
@@ -57,7 +57,7 @@ namespace HookerNS {
         LPVOID GetOriginalAddress();
         HookData* SetOriginalAddress(LPVOID addr);
         UINT GetAmountOfBytesToSkipBetweenScans();
-        HookData* SetFeaturesHandler(FeaturesHandlerNS::Service* featuresHandler);
+        HookData* SetFeaturesService(FeaturesNS::Service* featuresService);
     };
 
 }

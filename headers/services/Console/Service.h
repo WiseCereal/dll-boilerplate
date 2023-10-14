@@ -2,14 +2,14 @@
 
 #include "headers/pch.h"
 
-namespace ConsoleHandlerNS {
+namespace ConsoleNS {
 
-    class Handler {
+    class Service {
     private:
         FILE* file = NULL;
 
     public:
-        Handler();
+        Service();
         BOOL OpenConsole();
         BOOL CloseConsole();
     };

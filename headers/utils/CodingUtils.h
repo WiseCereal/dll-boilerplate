@@ -26,18 +26,6 @@ namespace CodingUtils {
 
     std::wstring GetThisExecutableFolderPath();
 
-    template<typename T>
-    std::string ScalarToHexString(T v) {
-        std::ostringstream stream;
-        stream << std::hex << v;
-        return stream.str();
-    }
-
-    template<typename T>
-    T CastLPVOID(LPVOID v) {
-        return *((T*)(&v));
-    }
-
     UINT GetTargetArchitecture();
 
     ADDRESS_TYPE ReverseBytes(UINT architecture, ADDRESS_TYPE v);

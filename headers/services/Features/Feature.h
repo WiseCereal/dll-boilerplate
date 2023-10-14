@@ -3,7 +3,7 @@
 #include "headers/pch.h"
 #include "headers/utils/CodingUtils.h"
 
-namespace FeaturesHandlerNS {
+namespace FeaturesNS {
 
     class Feature {
     protected:

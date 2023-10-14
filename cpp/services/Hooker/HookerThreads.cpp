@@ -2,7 +2,7 @@
 
 #include "headers/utils/AddressUtils.h"
 
-#include "headers/services/Hooker/Hooker.h"
+#include "headers/services/Hooker/Service.h"
 #include "headers/services/Hooker/HookData.h"
 #include "headers/utils/CodingUtils.h"
 
@@ -50,7 +50,7 @@ void Threads::OnInitAddressesThreadFinish(Service* s) {
         if (hook->ShouldEndThread()) {
             continue;
         }
-        hook->SetFeaturesHandler(s->GetFeaturesHandler());
+        hook->SetFeaturesService(s->GetFeaturesService());
         hook->InitFeatures();
     }
 

@@ -7,7 +7,7 @@ std::string Feature::GetName() {
     return NAME;
 }
 
-FeaturesHandlerNS::Feature* Feature::SetBoostLevel(UINT level) {
+FeaturesNS::Feature* Feature::SetBoostLevel(UINT level) {
     if (level < Levels::NORMAL || level > Levels::EXTREME) {
         throw std::runtime_error("Invalid test level");
     }

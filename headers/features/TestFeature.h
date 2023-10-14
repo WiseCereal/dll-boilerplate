@@ -1,8 +1,7 @@
 #pragma once
 
 #include "headers/pch.h"
-
-#include "headers/services/FeaturesHandler/Feature.h"
+#include "headers/services/Features/Feature.h"
 
 namespace FeaturesNS {
 
@@ -16,13 +15,13 @@ namespace FeaturesNS {
             static const UINT EXTREME = 3;
         }
 
-        class Feature: public FeaturesHandlerNS::Feature {
+        class Feature: public FeaturesNS::Feature {
         private:
             UINT boostLevel = Levels::NORMAL;
 
         public:
             std::string GetName();
-            FeaturesHandlerNS::Feature* SetBoostLevel(UINT lvl);
+            FeaturesNS::Feature* SetBoostLevel(UINT lvl);
             UINT GetBoostLevel();
         };
     }

@@ -1,7 +1,7 @@
 #include "headers/pch.h"
-#include "headers/services/FeaturesHandler/Feature.h"
+#include "headers/services/Features/Feature.h"
 
-using namespace FeaturesHandlerNS;
+using namespace FeaturesNS;
 
 Feature* Feature::Enable() {
     this->enabled = TRUE;

@@ -1,8 +1,8 @@
 #include "headers/pch.h"
 
-#include "headers/services/FeaturesHandler/Feature.h"
-#include "headers/services/FeaturesHandler/FeaturesHandler.h"
-#include "headers/services/Hooker/Hooker.h"
+#include "headers/services/Features/Feature.h"
+#include "headers/services/Features/Service.h"
+#include "headers/services/Hooker/Service.h"
 #include "headers/services/Hooker/Skeletons.h"
 #include "headers/exceptions/NotFoundException.h"
 #include "headers/utils/CodingUtils.h"
@@ -12,10 +12,10 @@ using namespace HookerNS;
 
 Service::Service(
     UINT architecture,
-    FeaturesHandlerNS::Service* featuresHandler
+    FeaturesNS::Service* featuresService
 ) {
     this->architecture = architecture;
-    this->featuresHandler = featuresHandler;
+    this->featuresService = featuresService;
 
     this->initSkeletons();
 
@@ -112,8 +112,8 @@ std::vector<HANDLE> Service::GetInitHookThreads() {
     return this->initHookThreads;
 }
 
-FeaturesHandlerNS::Service* Service::GetFeaturesHandler() {
-    return this->featuresHandler;
+FeaturesNS::Service* Service::GetFeaturesService() {
+    return this->featuresService;
 }
 
 

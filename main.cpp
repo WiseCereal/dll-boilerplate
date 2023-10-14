@@ -1,23 +1,23 @@
 #include "headers/pch.h"
 
 #include "headers/HackHandler.h"
-#include "headers/services/ConsoleHandler.h"
-#include "headers/services/FeaturesHandler/FeaturesHandler.h"
-#include "headers/services/Hooker/Hooker.h"
+#include "headers/services/Console/Service.h"
+#include "headers/services/Features/Service.h"
+#include "headers/services/Hooker/Service.h"
 
 #define EXPOSE __declspec(dllexport) BOOL __stdcall
 
 /******** Services initializations ********/
-ConsoleHandlerNS::Handler ConsoleHandler;
-FeaturesHandlerNS::Service FeaturesHandler;
+ConsoleNS::Service ConsoleService;
+FeaturesNS::Service FeaturesService;
 HookerNS::Service HookerService(
     CodingUtils::GetTargetArchitecture(),
-    &FeaturesHandler
+    &FeaturesService
 );
 
 HackHandlerNS::Service HackHandler(
     &HookerService,
-    &FeaturesHandler
+    &FeaturesService
 );
 /******************************************/
 
@@ -101,7 +101,7 @@ EXPOSE ExecuteFunction(LPVOID argumentsAddress) {
 
 DWORD __stdcall HackThread(HMODULE dllHandle) {
     try {
-        ConsoleHandler.OpenConsole();
+        ConsoleService.OpenConsole();
 
         HackHandler.Init();
         while (!HackHandler.ShouldDLLBeEjected()) {
@@ -119,7 +119,7 @@ DWORD __stdcall HackThread(HMODULE dllHandle) {
         MessageBoxA(0, e.what(), "", MB_ICONERROR | MB_SYSTEMMODAL);
     }
 
-    ConsoleHandler.CloseConsole();
+    ConsoleService.CloseConsole();
     FreeLibraryAndExitThread(dllHandle, 0);
 
     return 0;
