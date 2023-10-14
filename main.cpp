@@ -54,7 +54,7 @@ __declspec(dllexport) BOOL __stdcall ExecuteFunction(LPVOID argumentsAddress) {
         if (functionName == "SetVariableValue") {
             std::string variableName = (const char*)argumentAddress;
             ADDRESS_TYPE valueAddress = argumentAddress + variableName.length() + 1;
-            AddressesService.SetVariableValue(variableName, valueAddress);
+            return AddressesService.SetVariableValue(variableName, valueAddress);
         }
 
         throw std::exception("Invalid function name");
