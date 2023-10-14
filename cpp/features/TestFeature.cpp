@@ -8,10 +8,6 @@ std::string Feature::GetName() {
 }
 
 FeaturesNS::Feature* Feature::SetBoostLevel(UINT level) {
-    if (level < Levels::NORMAL || level > Levels::EXTREME) {
-        throw std::runtime_error("Invalid test level");
-    }
-
     this->boostLevel = level;
     return this;
 }
@@ -19,3 +15,5 @@ FeaturesNS::Feature* Feature::SetBoostLevel(UINT level) {
 UINT Feature::GetBoostLevel() {
     return this->boostLevel;
 }
+
+void Feature::OnHackLoop() {}

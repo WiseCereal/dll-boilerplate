@@ -75,6 +75,9 @@
     <ClCompile Include="cpp\utils\RegistersUtils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="cpp\services\Addresses\Service.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headers\pch.h">
@@ -123,6 +126,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="headers\services\Hooker\Skeletons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\services\Addresses\Addresses.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="headers\services\Addresses\Service.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

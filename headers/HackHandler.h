@@ -3,6 +3,7 @@
 #include "headers/pch.h"
 
 #include "headers/services/Features/Service.h"
+#include "headers/services/Addresses/Service.h"
 #include "headers/services/Hooker/Service.h"
 
 namespace HackHandlerNS {
@@ -14,12 +15,14 @@ namespace HackHandlerNS {
     private:
         HookerNS::Service* hookerService;
         FeaturesNS::Service* featuresService;
+        AddressesNS::Service* addressesService;
         BOOL shouldEjectDLL = FALSE;
 
     public:
         Service(
             HookerNS::Service* hookerService,
-            FeaturesNS::Service* featuresService
+            FeaturesNS::Service* featuresService,
+            AddressesNS::Service* addressesService
         );
 
         void Init();
@@ -30,6 +33,8 @@ namespace HackHandlerNS {
         BOOL IsReady();
         void MarkAsReady();
         HookerNS::Service* GetHookerService();
+        FeaturesNS::Service* GetFeaturesService();
+        AddressesNS::Service* GetAddressesService();
 
     private:
         BOOL isReady = FALSE;

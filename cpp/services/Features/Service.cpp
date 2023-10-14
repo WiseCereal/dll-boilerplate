@@ -1,6 +1,7 @@
 #include "headers/pch.h"
 
 #include "headers/services/Features/Feature.h"
+#include "headers/features/TestFeature.h"
 #include "headers/services/Features/Service.h"
 #include "headers/exceptions/NotFoundException.h"
 
@@ -36,12 +37,14 @@ Service* Service::DisableAllFeatures() {
     return this;
 }
 
-Service* Service::SetTestBoostLevel(UINT level) {
-    auto feature = (FeaturesNS::TestFeatureNS::Feature*)this->GetFeature(FeaturesNS::TestFeatureNS::NAME);
-    feature->SetBoostLevel(level);
-    return this;
-}
+void Service::SetTestBoostLevel(UINT level) {
+    if (level < TestFeatureNS::Levels::MIN_LEVEL || level > TestFeatureNS::Levels::MAX_LEVEL) {
+        throw std::runtime_error("Invalid faster movement speed level");
+    }
 
+    auto feature = (TestFeatureNS::Feature*)this->GetFeature(TestFeatureNS::NAME);
+    feature->SetBoostLevel(level);
+}
 
 Feature* Service::GetFeature(std::string featureName) {
     for (auto feature : this->featuresVector) {
@@ -53,6 +56,14 @@ Feature* Service::GetFeature(std::string featureName) {
     CustomExceptionsNS::NotFoundException ex;
     ex.setWhat("Feature " + featureName + " doesn't exist.");
     throw ex;
+}
+
+void Service::OnHackLoop() {
+    for (auto feature : this->featuresVector) {
+        if (feature->IsEnabled()) {
+            feature->OnHackLoop();
+        }
+    }
 }
 
 Service* Service::validateFeatures() {

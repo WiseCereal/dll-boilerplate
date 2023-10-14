@@ -95,7 +95,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>headers/pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Async</ExceptionHandling>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
@@ -119,7 +119,7 @@ echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_n
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>headers/pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Async</ExceptionHandling>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
@@ -143,7 +143,7 @@ echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_n
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>headers/pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Async</ExceptionHandling>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
@@ -167,7 +167,7 @@ echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_n
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>headers/pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Async</ExceptionHandling>
-      <LanguageStandard>stdcpp17</LanguageStandard>
+      <LanguageStandard>stdcpp20</LanguageStandard>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
     </ClCompile>
     <Link>
@@ -188,6 +188,7 @@ echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_n
     <ClCompile Include="cpp\features\TestFeature.cpp" />
     <ClCompile Include="cpp\HackHandler.cpp" />
     <ClCompile Include="cpp\hooks\TestHook.cpp" />
+    <ClCompile Include="cpp\services\Addresses\Service.cpp" />
     <ClCompile Include="cpp\services\Console\Service.cpp" />
     <ClCompile Include="cpp\services\Features\Feature.cpp" />
     <ClCompile Include="cpp\services\Features\Service.cpp" />
@@ -217,6 +218,8 @@ echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_n
     <ClInclude Include="headers\HackHandler.h" />
     <ClInclude Include="headers\hooks\TestHook.h" />
     <ClInclude Include="headers\pch.h" />
+    <ClInclude Include="headers\services\Addresses\Addresses.h" />
+    <ClInclude Include="headers\services\Addresses\Service.h" />
     <ClInclude Include="headers\services\Console\Service.h" />
     <ClInclude Include="headers\services\Features\Feature.h" />
     <ClInclude Include="headers\services\Features\Service.h" />

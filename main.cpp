@@ -3,13 +3,13 @@
 #include "headers/HackHandler.h"
 #include "headers/services/Console/Service.h"
 #include "headers/services/Features/Service.h"
+#include "headers/services/Addresses/Service.h"
 #include "headers/services/Hooker/Service.h"
-
-#define EXPOSE __declspec(dllexport) BOOL __stdcall
 
 /******** Services initializations ********/
 ConsoleNS::Service ConsoleService;
 FeaturesNS::Service FeaturesService;
+AddressesNS::Service AddressesService;
 HookerNS::Service HookerService(
     CodingUtils::GetTargetArchitecture(),
     &FeaturesService
@@ -17,57 +17,18 @@ HookerNS::Service HookerService(
 
 HackHandlerNS::Service HackHandler(
     &HookerService,
-    &FeaturesService
+    &FeaturesService,
+    &AddressesService
 );
 /******************************************/
 
-
-BOOL TestIntArgument(UINT arg) {
-    std::cout << "Int argument is " << arg << std::endl;
-    return TRUE;
-}
-
-BOOL TestStringArgument(std::string arg) {
-    std::cout << "String argument is " << arg << std::endl;
-    return TRUE;
-}
-
-BOOL TestMultipleArguments(ADDRESS_TYPE argumentsAddress) {
-    std::string argument1 = (const char*)argumentsAddress;
-
-    ADDRESS_TYPE argument2address = (ADDRESS_TYPE)argumentsAddress + (argument1.length() + 1);
-    UINT argument2 = *(UINT*)argument2address;
-
-    ADDRESS_TYPE argument3address = (ADDRESS_TYPE)argument2address + (sizeof(argument2));
-    double argument3 = *(double*)argument3address;
-
-    ADDRESS_TYPE argument4address = (ADDRESS_TYPE)argument3address + (sizeof(argument3));
-    float argument4 = *(float*)argument4address;
-
-    std::cout << " Argument 1 is " << argument1 << " | " << std::hex << &argument1 << std::endl;
-    std::cout << " Argument 2 is " << std::dec << argument2 << " | " << std::hex << &argument2 << std::endl;
-    std::cout << " Argument 3 is " << argument3 << " | " << std::hex << &argument3 << std::endl;
-    std::cout << " Argument 4 is " << argument4 << " | " << std::hex << &argument4 << std::endl;
-
-    return TRUE;
-}
-
-BOOL EjectDLL() {
-    HackHandler.Reset();
-    return HackHandler.MarkDLLToBeEjected();
-}
-
-BOOL IsDLLReady() {
-    return HackHandler.IsReady();
-}
-
-EXPOSE ExecuteFunction(LPVOID argumentsAddress) {
+__declspec(dllexport) BOOL __stdcall ExecuteFunction(LPVOID argumentsAddress) {
     try {
         std::string functionName = (const char*)argumentsAddress;
         ADDRESS_TYPE argumentAddress = (ADDRESS_TYPE)argumentsAddress + (functionName.length() + 1);
 
         if (functionName == "IsDLLReady") {
-            return IsDLLReady();
+            return HackHandler.IsReady();
         }
 
         if (!HackHandler.IsReady()) {
@@ -76,19 +37,24 @@ EXPOSE ExecuteFunction(LPVOID argumentsAddress) {
         }
 
         if (functionName == "EjectDLL") {
-            return EjectDLL();
+            HackHandler.Reset();
+            return HackHandler.MarkDLLToBeEjected();
         }
 
-        if (functionName == "TestIntArgument") {
-            return TestIntArgument(*(UINT*)argumentAddress);
+        if (functionName == "EnableFeature") {
+            FeaturesService.EnableFeature((const char*)argumentAddress);
+            return TRUE;
         }
 
-        if (functionName == "TestStringArgument") {
-            return TestStringArgument((const char*)argumentAddress);
+        if (functionName == "DisableFeature") {
+            FeaturesService.DisableFeature((const char*)argumentAddress);
+            return TRUE;
         }
 
-        if (functionName == "TestMultipleArguments") {
-            return TestMultipleArguments(argumentAddress);
+        if (functionName == "SetVariableValue") {
+            std::string variableName = (const char*)argumentAddress;
+            ADDRESS_TYPE valueAddress = argumentAddress + variableName.length() + 1;
+            AddressesService.SetVariableValue(variableName, valueAddress);
         }
 
         throw std::exception("Invalid function name");

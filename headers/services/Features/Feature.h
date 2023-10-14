@@ -11,6 +11,7 @@ namespace FeaturesNS {
     public:
         virtual ~Feature() {}
         virtual std::string GetName() = 0;
+        virtual void OnHackLoop() = 0;
 
         Feature() {}
 

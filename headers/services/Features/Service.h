@@ -21,8 +21,9 @@ namespace FeaturesNS {
         Service* EnableAllFeatures();
         Service* DisableAllFeatures();
         Feature* GetFeature(std::string featureName);
+        void OnHackLoop();
 
-        Service* SetTestBoostLevel(UINT level);
+        void SetTestBoostLevel(UINT level);
 
     private:
         Service* validateFeatures();
