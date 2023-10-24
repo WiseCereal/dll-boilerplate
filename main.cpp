@@ -8,8 +8,10 @@
 
 /******** Services initializations ********/
 ConsoleNS::Service ConsoleService;
-FeaturesNS::Service FeaturesService;
 AddressesNS::Service AddressesService;
+FeaturesNS::Service FeaturesService(
+    &AddressesService
+);
 HookerNS::Service HookerService(
     CodingUtils::GetTargetArchitecture(),
     &FeaturesService

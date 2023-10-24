@@ -1,15 +1,17 @@
 #include "headers/pch.h"
 
+#include "headers/services/Addresses/Service.h"
 #include "headers/services/Features/Feature.h"
-#include "headers/features/TestFeature.h"
 #include "headers/services/Features/Service.h"
+#include "headers/features/TestFeature.h"
 #include "headers/exceptions/NotFoundException.h"
 
 using namespace FeaturesNS;
 
-Service::Service() {
-    this->featuresVector.push_back(&this->testFeature);
+Service::Service(AddressesNS::Service* addressesService) {
+    this->addressesService = addressesService;
 
+    this->initFeaturesMap();
     this->validateFeatures();
 }
 
@@ -24,14 +26,14 @@ Service* Service::DisableFeature(std::string featureName) {
 }
 
 Service* Service::EnableAllFeatures() {
-    for (auto feature : this->featuresVector) {
+    for (auto const& [featureName, feature] : this->featuresMap) {
         feature->Enable();
     }
     return this;
 }
 
 Service* Service::DisableAllFeatures() {
-    for (auto feature : this->featuresVector) {
+    for (auto const& [featureName, feature] : this->featuresMap) {
         feature->Disable();
     }
     return this;
@@ -47,10 +49,8 @@ void Service::SetTestBoostLevel(UINT level) {
 }
 
 Feature* Service::GetFeature(std::string featureName) {
-    for (auto feature : this->featuresVector) {
-        if (feature->GetName() == featureName) {
-            return feature;
-        }
+    if (this->featuresMap.count(featureName)) {
+        return this->featuresMap[featureName];
     }
 
     CustomExceptionsNS::NotFoundException ex;
@@ -59,16 +59,17 @@ Feature* Service::GetFeature(std::string featureName) {
 }
 
 void Service::OnHackLoop() {
-    for (auto feature : this->featuresVector) {
-        if (feature->IsEnabled()) {
-            feature->OnHackLoop();
+    for (auto const& [featureName, feature] : this->featuresMap) {
+        if (!feature->IsEnabled()) {
+            continue;
         }
+        feature->OnHackLoop();
     }
 }
 
 Service* Service::validateFeatures() {
     std::vector<std::string> featureNames;
-    for (auto feature : this->featuresVector) {
+    for (auto const& [featureName, feature] : this->featuresMap) {
         for (auto& featureName : featureNames) {
             if (featureName == feature->GetName()) {
                 throw std::runtime_error("Duplicated feature: " + featureName);
@@ -80,4 +81,12 @@ Service* Service::validateFeatures() {
     return this;
 }
 
+Service* Service::initFeaturesMap() {
+    this->featuresMap[this->testFeature.GetName()] = &this->testFeature;
 
+    for (auto const& [featureName, feature] : this->featuresMap) {
+        feature->SetAddressesMap(this->addressesService->GetAddressesMap());
+    }
+
+    return this;
+}

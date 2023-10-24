@@ -43,7 +43,7 @@ Service* Service::Reset() {
         Sleep(20);
     }
     this->requestToEndThread = FALSE;
-
+    
     return this;
 }
 
@@ -68,6 +68,7 @@ Service* Service::UpdateAddressesMap() {
         this->addressesMap[key] = (ADDRESS_TYPE)address;
     }
     */
+
     return this;
 }
 
@@ -91,4 +92,8 @@ BOOL Service::SetVariableValue(std::string variableName, ADDRESS_TYPE valueAddre
     default:
         throw std::runtime_error("Unsupported variable type.");
     }
+}
+
+std::map<std::string, ADDRESS_TYPE>* Service::GetAddressesMap() {
+    return &this->addressesMap;
 }

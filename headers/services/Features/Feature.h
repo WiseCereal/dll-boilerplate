@@ -8,6 +8,7 @@ namespace FeaturesNS {
     class Feature {
     protected:
         BOOL enabled = FALSE;
+        std::map<std::string, ADDRESS_TYPE>* addressesMap = {};
     public:
         virtual ~Feature() {}
         virtual std::string GetName() = 0;
@@ -18,6 +19,7 @@ namespace FeaturesNS {
         Feature* Enable();
         Feature* Disable();
         BOOL IsEnabled();
+        Feature* SetAddressesMap(std::map<std::string, ADDRESS_TYPE>* addressesMap);
     };
 
 }

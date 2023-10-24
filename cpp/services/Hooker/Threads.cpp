@@ -46,7 +46,11 @@ void Threads::OnInitAddressesThreadFinish(Service* s) {
         CloseHandle(h);
     }
 
-    for (auto hook : s->GetHooksVector()) {
+    auto hooksMap = s->GetHooksMap();
+    for (auto i = hooksMap->begin(); i != hooksMap->end(); i++) {
+        std::string hookName = i->first;
+        HookData* hook = i->second;
+
         if (hook->ShouldEndThread()) {
             continue;
         }
@@ -55,5 +59,4 @@ void Threads::OnInitAddressesThreadFinish(Service* s) {
     }
 
     s->EnableAllHooks();
-    std::cout << " All Hooks Enabled " << std::endl;
 }

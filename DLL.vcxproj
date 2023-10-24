@@ -193,8 +193,8 @@ echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_n
     <ClCompile Include="cpp\services\Features\Feature.cpp" />
     <ClCompile Include="cpp\services\Features\Service.cpp" />
     <ClCompile Include="cpp\services\Hooker\HookData.cpp" />
-    <ClCompile Include="cpp\services\Hooker\Hooker.cpp" />
-    <ClCompile Include="cpp\services\Hooker\HookerThreads.cpp" />
+    <ClCompile Include="cpp\services\Hooker\Service.cpp" />
+    <ClCompile Include="cpp\services\Hooker\Threads.cpp" />
     <ClCompile Include="cpp\utils\AddressUtils.cpp" />
     <ClCompile Include="cpp\utils\CodingUtils.cpp" />
     <ClCompile Include="cpp\utils\RegistersUtils.cpp" />

@@ -10,22 +10,22 @@ using namespace HooksNS::TestHook;
 
 
 void TestHookedCode() {
-    ADDRESS_TYPE rax = 0x0;
-    ADDRESS_TYPE rcx = 0x0;
-    ADDRESS_TYPE rdx = 0x0;
-    ADDRESS_TYPE rbx = 0x0;
-    ADDRESS_TYPE rsp = 0x0;
-    ADDRESS_TYPE rbp = 0x0;
-    ADDRESS_TYPE rsi = 0x0;
-    ADDRESS_TYPE rdi = 0x0;
-    ADDRESS_TYPE r8 = 0x0;
-    ADDRESS_TYPE r9 = 0x0;
-    ADDRESS_TYPE r10 = 0x0;
-    ADDRESS_TYPE r11 = 0x0;
-    ADDRESS_TYPE r12 = 0x0;
-    ADDRESS_TYPE r13 = 0x0;
-    ADDRESS_TYPE r14 = 0x0;
-    ADDRESS_TYPE r15 = 0x0;
+    ADDRESS_TYPE rax;
+    ADDRESS_TYPE rcx;
+    ADDRESS_TYPE rdx;
+    ADDRESS_TYPE rbx;
+    ADDRESS_TYPE rsp;
+    ADDRESS_TYPE rbp;
+    ADDRESS_TYPE rsi;
+    ADDRESS_TYPE rdi;
+    ADDRESS_TYPE r8;
+    ADDRESS_TYPE r9;
+    ADDRESS_TYPE r10;
+    ADDRESS_TYPE r11;
+    ADDRESS_TYPE r12;
+    ADDRESS_TYPE r13;
+    ADDRESS_TYPE r14;
+    ADDRESS_TYPE r15;
 
     asm("mov %%rax, %0" : "=r" (rax));
     asm("mov %%rcx, %0" : "=r" (rcx));
@@ -43,6 +43,58 @@ void TestHookedCode() {
     asm("mov %%r13, %0" : "=r" (r13));
     asm("mov %%r14, %0" : "=r" (r14));
     asm("mov %%r15, %0" : "=r" (r15));
+
+    //TODO: USE ReadProcessMemory to read memory where you are unsure if it's good memory and that's it :)
+    // and remove min and max address, no need for this anymore if you use the power of ReadProcessMemory 
+
+
+    ADDRESS_TYPE minAddress = 0x10000000000;
+    ADDRESS_TYPE maxAddress = 0x7FFFFFFFFFFF;
+
+    ADDRESS_TYPE itemTypeStructAddress = rax + 0x10;
+
+    if (itemTypeStructAddress < minAddress || itemTypeStructAddress > maxAddress) {
+        return;
+    }
+
+
+    ADDRESS_TYPE checkAddress = rax + 0x08;
+
+    UINT checkValue = *(UINT*)checkAddress;
+    if (checkValue == 0) {
+        return;
+    }
+
+    auto itemTypeStruct = ((ADDRESS_TYPE)(*(LPVOID*)itemTypeStructAddress));
+    auto itemTypeStringAddress = itemTypeStruct + 0x18;
+
+    if (itemTypeStringAddress < minAddress || itemTypeStringAddress > maxAddress) {
+        return;
+    }
+
+    std::vector<BYTE> str = {};
+    size_t i = 0;
+    while (true) {
+        BYTE b = *(BYTE*)(itemTypeStringAddress + i);
+
+        if (b == 0x00) {
+            break;
+        }
+        if (i > 16) {
+            break;
+        }
+
+        str.push_back(b);
+        i++;
+    }
+
+    std::string holyGrail(str.begin(), str.end());
+
+    if (holyGrail == "SuperLockKeys") {
+        auto v = (*(double*)rax);
+        std::cout << "titan blood -> " << v << std::endl;
+        std::cout << " ------------- " << std::endl;
+    }
 }
 
 
@@ -50,14 +102,14 @@ Data::Data() {
     this->SetModuleName(L"EngineWin64s.dll");
 
     this->SetBytesToReplace({
-        0x48, 0x89, 0x07, // mov [rdi], rax
-        0x41, 0x8B, 0x44, 0xD1, 0x18, // mov eax, [r9+rdx*8+18]
-        0x89, 0x47, 0x08, // mov [rdi+08], eax
-        0x48, 0x8B, 0x4E, 0x20, // mov rcx,[rsi+20]
-        0x48, 0x8B, 0x04, 0xD1 // mov rax,[rcx+rdx*8]  <---- Here is where the item address is
-    });
+        0x48, 0x23, 0xC8, // and rcx,rax
+        0x49, 0x8B, 0x40, 0x20, // mov rax,[r8+20]
+        0x48, 0x8D, 0x0C, 0x89, // lea rcx,[rcx+rcx*4]
+        0x48, 0x8D, 0x04, 0xC8, // lea rax,[rax+rcx*8]
+        0x0F, 0x1F, 0x00 // nop dword ptr [rax]
+        });
 
-    this->SetBytesToReplaceAddressOffset("0x383585");
+    this->SetBytesToReplaceAddressOffset("0x382EFE");
 }
 
 ADDRESS_TYPE Data::GetHookFunctionAddress() {

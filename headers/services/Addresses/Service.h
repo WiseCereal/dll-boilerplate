@@ -22,6 +22,7 @@ namespace AddressesNS {
         BOOL GetIsThreadRunning();
         Service* SetIsThreadRunning(BOOL v);
         BOOL SetVariableValue(std::string variableName, ADDRESS_TYPE valueAddress);
+        std::map<std::string, ADDRESS_TYPE>* GetAddressesMap();
 
     private:
         template<typename T>

@@ -39,7 +39,7 @@
     <ClCompile Include="cpp\HackHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\services\Hooker\Hooker.cpp">
+    <ClCompile Include="cpp\services\Hooker\Service.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cpp\utils\CodingUtils.cpp">
@@ -66,7 +66,7 @@
     <ClCompile Include="cpp\hooks\TestHook.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="cpp\services\Hooker\HookerThreads.cpp">
+    <ClCompile Include="cpp\services\Hooker\Threads.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cpp\utils\AddressUtils.cpp">

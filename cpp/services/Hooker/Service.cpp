@@ -19,13 +19,14 @@ Service::Service(
 
     this->initSkeletons();
 
-    this->hooksVector.push_back(&this->testHook);
+
+    this->hooksMap[this->testHook.GetName()] = &this->testHook;
 
     this->validateHooks();
 }
 
 Service* Service::Reset() {
-    for (auto hook : this->hooksVector) {
+    for (auto const& [hookName, hook] : this->hooksMap) {
         this->_disableHook(hook);
         hook->Reset();
         hook->SetRequestToEndThread();
@@ -38,14 +39,14 @@ Service* Service::Reset() {
     return this;
 }
 
-std::vector<HookerNS::HookData*> Service::GetHooksVector() {
-    return this->hooksVector;
+std::map<std::string, HookData*>* Service::GetHooksMap() {
+    return &this->hooksMap;
 }
 
 Service* Service::InitHooks(std::function<void()> onFinishCallback) {
     this->initHookThreads.clear();
     HANDLE t;
-    for (auto hook : this->hooksVector) {
+    for (auto const& [hookName, hook] : this->hooksMap) {
         t = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Threads::InitAddressesThread, hook, 0, NULL);
         if (t) {
             this->initHookThreads.push_back(t);
@@ -71,7 +72,7 @@ Service* Service::InitHooks(std::function<void()> onFinishCallback) {
 }
 
 BOOL Service::AreThereAnyInitAddressThreadsRunning() {
-    for (auto hook : this->hooksVector) {
+    for (auto const& [hookName, hook] : this->hooksMap) {
         if (hook->GetIsFindOriginalAddressThreadRunning()) {
             return TRUE;
         }
@@ -81,17 +82,17 @@ BOOL Service::AreThereAnyInitAddressThreadsRunning() {
 }
 
 Service* Service::EnableHook(std::string hookName) {
-    this->_enableHook(this->findHook(hookName));
+    this->_enableHook(this->getHook(hookName));
     return this;
 }
 
 Service* Service::DisableHook(std::string hookName) {
-    this->_disableHook(this->findHook(hookName));
+    this->_disableHook(this->getHook(hookName));
     return this;
 }
 
 Service* Service::EnableAllHooks() {
-    for (auto hook : this->hooksVector) {
+    for (auto const& [hookName, hook] : this->hooksMap) {
         if (hook->ShouldEndThread()) {
             continue;
         }
@@ -101,7 +102,7 @@ Service* Service::EnableAllHooks() {
 }
 
 Service* Service::DisableAllHooks() {
-    for (auto hook : this->hooksVector) {
+    for (auto const& [hookName, hook] : this->hooksMap) {
         this->_disableHook(hook);
     }
     return this;
@@ -119,7 +120,7 @@ FeaturesNS::Service* Service::GetFeaturesService() {
 
 Service* Service::validateHooks() {
     std::vector<std::string> hooksNames;
-    for (auto hook : this->hooksVector) {
+    for (auto const& [hookName, hook] : this->hooksMap) {
         if (!hook->GetBytesToReplaceAddressOffset()) {
             throw std::runtime_error("Hook " + hook->GetName() + " doesn't have an address offset.");
         }
@@ -138,11 +139,9 @@ Service* Service::validateHooks() {
     return this;
 }
 
-HookerNS::HookData* Service::findHook(std::string hookName) {
-    for (auto hook : this->hooksVector) {
-        if (hook->GetName() == hookName) {
-            return hook;
-        }
+HookerNS::HookData* Service::getHook(std::string hookName) {
+    if (this->hooksMap.count(hookName)) {
+        return this->hooksMap[hookName];
     }
 
     CustomExceptionsNS::NotFoundException ex;

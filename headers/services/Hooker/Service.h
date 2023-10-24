@@ -14,7 +14,7 @@ namespace HookerNS {
 
         HooksNS::TestHook::Data testHook;
 
-        std::vector<HookData*> hooksVector;
+        std::map<std::string, HookData*> hooksMap;
         std::vector<HANDLE> initHookThreads;
         std::vector<BYTE> jmpSkeleton;
         std::vector<BYTE> trampolineSkeleton;
@@ -25,8 +25,6 @@ namespace HookerNS {
             FeaturesNS::Service* featuresService
         );
 
-        Service* SetBaseAddress(LPVOID addr);
-        LPVOID GetBaseAddress();
         Service* InitHooks(std::function<void()> onFinishCallback);
         BOOL AreThereAnyInitAddressThreadsRunning();
         Service* Reset();
@@ -34,14 +32,14 @@ namespace HookerNS {
         Service* DisableHook(std::string hookName);
         Service* EnableAllHooks();
         Service* DisableAllHooks();
-        std::vector<HookData*> GetHooksVector();
+        std::map<std::string, HookData*>* GetHooksMap();
         std::vector<HANDLE> GetInitHookThreads();
         FeaturesNS::Service* GetFeaturesService();
 
     private:
         Service* initSkeletons();
         Service* validateHooks();
-        HookData* findHook(std::string hookName);
+        HookData* getHook(std::string hookName);
         Service* _enableHook(HookData* hookData);
         Service* _disableHook(HookData* hookData);
         std::vector<BYTE> prepareTrampolineBytes(HookData* hookData);
