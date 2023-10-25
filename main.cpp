@@ -1,10 +1,10 @@
-#include "headers/pch.h"
+#include "pch.h"
 
-#include "headers/HackHandler.h"
-#include "headers/services/Console/Service.h"
-#include "headers/services/Features/Service.h"
-#include "headers/services/Addresses/Service.h"
-#include "headers/services/Hooker/Service.h"
+#include "src/HackHandler.h"
+#include "src/services/Console/Service.h"
+#include "src/services/Features/Service.h"
+#include "src/services/Addresses/Service.h"
+#include "src/services/Hooker/Service.h"
 
 /******** Services initializations ********/
 ConsoleNS::Service ConsoleService;

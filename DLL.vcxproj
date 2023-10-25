@@ -93,7 +93,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>headers/pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Async</ExceptionHandling>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
@@ -117,7 +117,7 @@ echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_n
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>headers/pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Async</ExceptionHandling>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
@@ -141,7 +141,7 @@ echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_n
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>headers/pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Async</ExceptionHandling>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
@@ -165,7 +165,7 @@ echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_n
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
-      <PrecompiledHeaderFile>headers/pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <ExceptionHandling>Async</ExceptionHandling>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ObjectFileName>$(IntDir)/%(RelativeDir)/</ObjectFileName>
@@ -183,52 +183,52 @@ echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_n
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="cpp\exceptions\AccessViolationException.cpp" />
-    <ClCompile Include="cpp\exceptions\NotFoundException.cpp" />
-    <ClCompile Include="cpp\features\TestFeature.cpp" />
-    <ClCompile Include="cpp\HackHandler.cpp" />
-    <ClCompile Include="cpp\hooks\TestHook.cpp" />
-    <ClCompile Include="cpp\services\Addresses\Service.cpp" />
-    <ClCompile Include="cpp\services\Console\Service.cpp" />
-    <ClCompile Include="cpp\services\Features\Feature.cpp" />
-    <ClCompile Include="cpp\services\Features\Service.cpp" />
-    <ClCompile Include="cpp\services\Hooker\HookData.cpp" />
-    <ClCompile Include="cpp\services\Hooker\Service.cpp" />
-    <ClCompile Include="cpp\services\Hooker\Threads.cpp" />
-    <ClCompile Include="cpp\utils\AddressUtils.cpp" />
-    <ClCompile Include="cpp\utils\CodingUtils.cpp" />
-    <ClCompile Include="cpp\utils\RegistersUtils.cpp" />
+    <ClCompile Include="src\exceptions\AccessViolationException.cpp" />
+    <ClCompile Include="src\exceptions\NotFoundException.cpp" />
+    <ClCompile Include="src\features\TestFeature.cpp" />
+    <ClCompile Include="src\HackHandler.cpp" />
+    <ClCompile Include="src\hooks\TestHook.cpp" />
+    <ClCompile Include="src\services\Addresses\Service.cpp" />
+    <ClCompile Include="src\services\Console\Service.cpp" />
+    <ClCompile Include="src\services\Features\Feature.cpp" />
+    <ClCompile Include="src\services\Features\Service.cpp" />
+    <ClCompile Include="src\services\Hooker\HookData.cpp" />
+    <ClCompile Include="src\services\Hooker\Service.cpp" />
+    <ClCompile Include="src\services\Hooker\Threads.cpp" />
+    <ClCompile Include="src\utils\AddressUtils.cpp" />
+    <ClCompile Include="src\utils\CodingUtils.cpp" />
+    <ClCompile Include="src\utils\RegistersUtils.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">headers/pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">headers/pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">headers/pch.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">headers/pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headers\exceptions\AccessViolationException.h" />
-    <ClInclude Include="headers\exceptions\NotFoundException.h" />
-    <ClInclude Include="headers\features\TestFeature.h" />
-    <ClInclude Include="headers\framework.h" />
-    <ClInclude Include="headers\HackHandler.h" />
-    <ClInclude Include="headers\hooks\TestHook.h" />
-    <ClInclude Include="headers\pch.h" />
-    <ClInclude Include="headers\services\Addresses\Addresses.h" />
-    <ClInclude Include="headers\services\Addresses\Service.h" />
-    <ClInclude Include="headers\services\Console\Service.h" />
-    <ClInclude Include="headers\services\Features\Feature.h" />
-    <ClInclude Include="headers\services\Features\Service.h" />
-    <ClInclude Include="headers\services\Hooker\HookData.h" />
-    <ClInclude Include="headers\services\Hooker\Service.h" />
-    <ClInclude Include="headers\services\Hooker\Skeletons.h" />
-    <ClInclude Include="headers\utils\AddressUtils.h" />
-    <ClInclude Include="headers\utils\CodingUtils.h" />
-    <ClInclude Include="headers\utils\RegistersUtils.h" />
+    <ClInclude Include="src\exceptions\AccessViolationException.h" />
+    <ClInclude Include="src\exceptions\NotFoundException.h" />
+    <ClInclude Include="src\features\TestFeature.h" />
+    <ClInclude Include="framework.h" />
+    <ClInclude Include="src\HackHandler.h" />
+    <ClInclude Include="src\hooks\TestHook.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="src\services\Addresses\Addresses.h" />
+    <ClInclude Include="src\services\Addresses\Service.h" />
+    <ClInclude Include="src\services\Console\Service.h" />
+    <ClInclude Include="src\services\Features\Feature.h" />
+    <ClInclude Include="src\services\Features\Service.h" />
+    <ClInclude Include="src\services\Hooker\HookData.h" />
+    <ClInclude Include="src\services\Hooker\Service.h" />
+    <ClInclude Include="src\services\Hooker\Skeletons.h" />
+    <ClInclude Include="src\utils\AddressUtils.h" />
+    <ClInclude Include="src\utils\CodingUtils.h" />
+    <ClInclude Include="src\utils\RegistersUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
