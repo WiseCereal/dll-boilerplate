@@ -19,6 +19,12 @@ void Threads::AddressessThread(Service* s) {
             return;
         }
         s->UpdateAddressesMap();
+        try {
+            s->UpdateVariablesFile();
+        }
+        catch (std::exception e) {
+            std::cout << "Error updating variables file" << e.what() << std::endl;
+        }
         Sleep(ADDRESSES_THREAD_TICKER_IN_MS);
     }
 }
@@ -68,6 +74,39 @@ Service* Service::UpdateAddressesMap() {
         this->addressesMap[key] = (ADDRESS_TYPE)address;
     }
     */
+
+    return this;
+}
+
+Service* Service::UpdateVariablesFile() {
+    std::string fileContents = "{";
+
+    for (auto const& [variableName, value] : this->addressesMap) {
+        fileContents = fileContents + "\"" + variableName + "\":";
+        switch (VARIABLE_TYPES.at(variableName)) {
+        case VariableType::UINT32: {
+            fileContents = fileContents + std::to_string(this->Read<UINT32>(variableName)) + ",";
+        } break;
+        case VariableType::INT32: {
+            fileContents = fileContents + std::to_string(this->Read<INT32>(variableName)) + ",";
+        } break;
+        case VariableType::DOUBLE: {
+            fileContents = fileContents + std::to_string(this->Read<DOUBLE>(variableName)) + ",";
+        } break;
+        case VariableType::FLOAT: {
+            fileContents = fileContents + std::to_string(this->Read<FLOAT>(variableName)) + ",";
+        } break;
+        case VariableType::BOOL: {
+            fileContents = fileContents + std::to_string(this->Read<BOOL>(variableName)) + ",";
+        } break;
+        }
+    }
+    fileContents.pop_back();
+    fileContents = fileContents + "}";
+
+    std::ofstream file("variables_values.json");
+    file << fileContents;
+    file.close();
 
     return this;
 }
