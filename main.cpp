@@ -1,4 +1,4 @@
-#include "pch.h"
+#include "src/pch/pch.h"
 
 #include "src/HackHandler.h"
 #include "src/services/Console/Service.h"

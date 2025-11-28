@@ -1,6 +1,6 @@
 #pragma once
 
-#include "pch.h"
+#include "src/pch/pch.h"
 #include "src/utils/RegistersUtils.h"
 #include "src/features/TestFeature.h"
 #include "src/services/Hooker/HookData.h"
