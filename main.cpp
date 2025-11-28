@@ -70,9 +70,8 @@ __declspec(dllexport) BOOL __stdcall ExecuteFunction(LPVOID argumentsAddress) {
 DWORD __stdcall HackThread(HMODULE dllHandle) {
     try {
         ConsoleService.OpenConsole();
-        std::cout << " Hi there! " << std::endl;
 
-        // HackHandler.Init();
+        HackHandler.Init();
         while (!HackHandler.ShouldDLLBeEjected()) {
             try {
                 HackHandler.MainLoop();
