@@ -191,21 +191,7 @@ echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_n
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\exceptions\AccessViolationException.cpp" />
-    <ClCompile Include="src\exceptions\NotFoundException.cpp" />
-    <ClCompile Include="src\features\TestFeature.cpp" />
-    <ClCompile Include="src\HackHandler.cpp" />
-    <ClCompile Include="src\hooks\TestHook.cpp" />
-    <ClCompile Include="src\services\Addresses\Service.cpp" />
     <ClCompile Include="src\services\Console\Service.cpp" />
-    <ClCompile Include="src\services\Features\Feature.cpp" />
-    <ClCompile Include="src\services\Features\Service.cpp" />
-    <ClCompile Include="src\services\Hooker\HookData.cpp" />
-    <ClCompile Include="src\services\Hooker\Service.cpp" />
-    <ClCompile Include="src\services\Hooker\Threads.cpp" />
-    <ClCompile Include="src\utils\AddressUtils.cpp" />
-    <ClCompile Include="src\utils\CodingUtils.cpp" />
-    <ClCompile Include="src\utils\RegistersUtils.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\pch\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
@@ -219,23 +205,8 @@ echo d | xcopy /c /y "$(TargetPath)" "C:\Users\mgona\AppData\Local\electron_ts_n
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\exceptions\AccessViolationException.h" />
-    <ClInclude Include="src\exceptions\NotFoundException.h" />
-    <ClInclude Include="src\features\TestFeature.h" />
-    <ClInclude Include="src\HackHandler.h" />
-    <ClInclude Include="src\hooks\TestHook.h" />
     <ClInclude Include="src\pch\pch.h" />
-    <ClInclude Include="src\services\Addresses\Addresses.h" />
-    <ClInclude Include="src\services\Addresses\Service.h" />
     <ClInclude Include="src\services\Console\Service.h" />
-    <ClInclude Include="src\services\Features\Feature.h" />
-    <ClInclude Include="src\services\Features\Service.h" />
-    <ClInclude Include="src\services\Hooker\HookData.h" />
-    <ClInclude Include="src\services\Hooker\Service.h" />
-    <ClInclude Include="src\services\Hooker\Skeletons.h" />
-    <ClInclude Include="src\utils\AddressUtils.h" />
-    <ClInclude Include="src\utils\CodingUtils.h" />
-    <ClInclude Include="src\utils\RegistersUtils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

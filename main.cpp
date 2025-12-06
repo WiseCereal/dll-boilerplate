@@ -1,105 +1,67 @@
 #include "src/pch/pch.h"
 
-#include "src/HackHandler.h"
 #include "src/services/Console/Service.h"
-#include "src/services/Features/Service.h"
-#include "src/services/Addresses/Service.h"
-#include "src/services/Hooker/Service.h"
 
-/******** Services initializations ********/
-ConsoleNS::Service ConsoleService;
-AddressesNS::Service AddressesService;
-FeaturesNS::Service FeaturesService(
-    &AddressesService
-);
-HookerNS::Service HookerService(
-    CodingUtils::GetTargetArchitecture(),
-    &FeaturesService
-);
-
-HackHandlerNS::Service HackHandler(
-    &HookerService,
-    &FeaturesService,
-    &AddressesService
-);
-/******************************************/
-
-__declspec(dllexport) BOOL __stdcall ExecuteFunction(LPVOID argumentsAddress) {
-    try {
-        std::string functionName = (const char*)argumentsAddress;
-        ADDRESS_TYPE argumentAddress = (ADDRESS_TYPE)argumentsAddress + (functionName.length() + 1);
-
-        if (functionName == "IsDLLReady") {
-            return HackHandler.IsReady();
-        }
-
-        if (!HackHandler.IsReady()) {
-            std::cout << " DLL is not ready - Disallowed to call DLL functions until it's ready " << std::endl;
-            return FALSE;
-        }
-
-        if (functionName == "EjectDLL") {
-            HackHandler.Reset();
-            return HackHandler.MarkDLLToBeEjected();
-        }
-
-        if (functionName == "EnableFeature") {
-            FeaturesService.EnableFeature((const char*)argumentAddress);
-            return TRUE;
-        }
-
-        if (functionName == "DisableFeature") {
-            FeaturesService.DisableFeature((const char*)argumentAddress);
-            return TRUE;
-        }
-
-        if (functionName == "SetVariableValue") {
-            std::string variableName = (const char*)argumentAddress;
-            ADDRESS_TYPE valueAddress = argumentAddress + variableName.length() + 1;
-            return AddressesService.SetVariableValue(variableName, valueAddress);
-        }
-
-        throw std::exception("Invalid function name");
-    }
-    catch (std::exception& e) {
-        std::cout << " Error -> " << e.what() << std::endl;
-        return FALSE;
-    }
-}
 
 DWORD __stdcall HackThread(HMODULE dllHandle) {
-    try {
-        ConsoleService.OpenConsole();
+    ConsoleNS::Service consoleService;
 
-        HackHandler.Init();
-        while (!HackHandler.ShouldDLLBeEjected()) {
+    try {
+        consoleService.OpenConsole();
+
+        while (TRUE) { // todo: eject combination keys
             try {
-                HackHandler.MainLoop();
+                // loop
             }
             catch (std::exception& e) {
                 std::cout << " Exception -> " << e.what() << std::endl;
             }
 
-            Sleep(HackHandlerNS::TICKER_IN_MS);
+            Sleep(34);
         };
     }
     catch (const std::exception& e) {
         MessageBoxA(0, e.what(), "", MB_ICONERROR | MB_SYSTEMMODAL);
     }
 
-    ConsoleService.CloseConsole();
+    consoleService.CloseConsole();
     FreeLibraryAndExitThread(dllHandle, 0);
 
     return 0;
 }
 
-BOOL __stdcall DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
-    switch (ul_reason_for_call) {
+extern "C" __declspec(dllexport) int WINAPI StartHackThread() {
+    HANDLE threadHandle = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)HackThread, GetModuleHandle(NULL), 0, NULL);
+    if (!threadHandle) {
+        return GetLastError();
+    }
+
+    CloseHandle(threadHandle);
+    return 0;
+}
+
+extern "C" __declspec(dllexport) float GetPlayerHealth() {
+    /*
+        <Address>"GameAssembly.dll"+0305D3B8</Address>
+        <Offset>90</Offset>
+        <Offset>60</Offset>
+        <Offset>0</Offset>
+        <Offset>B8</Offset>
+        <Offset>40</Offset>
+    */
+
+    return 123;
+}
+
+extern "C" __declspec(dllexport) BOOL SetPlayerHealth(float value) {
+    return TRUE;
+}
+
+BOOL __stdcall DllMain(HMODULE dllHandle, DWORD reason, LPVOID lpReserved) {
+    switch (reason) {
     case DLL_PROCESS_ATTACH: {
-        auto thread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)HackThread, hModule, 0, NULL);
-        if (thread) {
-            CloseHandle(thread);
-        }
+        DisableThreadLibraryCalls(dllHandle);
+        MessageBoxA(NULL, "DLL Injected", "", MB_OK);
     } break;
     case DLL_THREAD_ATTACH:
     case DLL_THREAD_DETACH:
